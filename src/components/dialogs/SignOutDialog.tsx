@@ -9,16 +9,16 @@ import {
 import * as M2DColor from "react-native-paper/src/styles/themes/v2/colors";
 
 //@ts-ignore
-import signout from '@assets/signout.png'
-import email from '@assets/email.png'
-import phone from '@assets/phone.png'
+import signout from '../../assets/signout.png'
+import email from '../../assets/email.png'
+import phone from '../../assets/phone.png'
 import {Box,Flex, Text} from "@react-native-material/core";
 import {sanFranciscoWeights} from "react-native-typography";
 import { CommonActions, useNavigation } from "@react-navigation/native";
-import * as SecureStore from "expo-secure-store";
-import {StoreKeys} from "@config/constants";
+// import * as SecureStore from "expo-secure-store";
+// import {StoreKeys} from "@config/constants";
 import {useDispatch} from "react-redux";
-import {setUser} from "../../redux/user/userActions";
+// import {setUser} from "../../redux/user/userActions";
 import normalize from '../../utils/normalize';
 interface  Types{
   visible:    boolean;

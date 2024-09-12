@@ -11,18 +11,19 @@ import * as M2DColor from "react-native-paper/src/styles/themes/v2/colors";
 //@ts-ignore
 import error404 from '@assets/404.png'
 //@ts-ignore
-import tick from '@assets/icons/tick.png'
-import email from '@assets/email.png'
-import phone from '@assets/phone.png'
+import tick from '../../assets/icons/tick.png'
+import email from '../../assets/email.png'
+import phone from '../../assets/phone.png'
 import {Box,Flex, Text} from "@react-native-material/core";
 import {sanFranciscoWeights} from "react-native-typography";
 import { CommonActions } from "@react-navigation/native";
-import {Languages} from "@services/languageList";
+// import {Languages} from "../../services/languageList";
 import i18next from "i18next";
-import * as SecureStore from 'expo-secure-store';
-import {StoreKeys} from "@config/constants";
+// import * as SecureStore from 'expo-secure-store';
+// import {StoreKeys} from "@config/constants";
 import {useTranslation} from "react-i18next";
 import normalize from '../../utils/normalize';
+import { Languages } from '../../services/languageList';
 interface  Types{
   visible:    boolean;
   setVisible:React.Dispatch<React.SetStateAction<any>>

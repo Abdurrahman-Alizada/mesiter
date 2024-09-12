@@ -12,20 +12,16 @@ import {TextInput} from "react-native-paper";
 import * as yup from 'yup';
 import {Formik} from 'formik';
 
-// import CustomTextInput from "@components/CustomTextInput";
+// import  from "@components/CustomTextInput";
+import CustomTextInput from "../../../components/CustomTextInput";
+
 import {CommonActions, useNavigation} from "@react-navigation/native";
 import CustomDialog from "../../../components/signin/CustomDialog.tsx";
 import { useDispatch } from "react-redux";
-// import { setUser } from "../../redux/user/userActions";
-import firestore from "@react-native-firebase/firestore";
-// import {CollectionConstant} from "../../firebase/CollectionsConstant";
-import {showMessage} from "react-native-flash-message";
-// import * as SecureStore from "expo-secure-store";
-// import {StoreKeys} from "@config/constants";
 
 import {UIActivityIndicator} from "react-native-indicators";
 import normalize from '../../../utils/normalize';
-import CustomTextInput from '../../../components/CustomTextInput';
+
 const SignInPre = () => {
     const navigation =useNavigation()
 
@@ -40,7 +36,8 @@ const SignInPre = () => {
 
     //@ts-ignore
     const handleSubmit = (values, actions) => {
-     
+    //  navigation.navigate({name:"HomeStack",screen:"Dashboard"})
+     navigation.navigate("TabNavigation")
 
     };
 

@@ -4,8 +4,8 @@ import {
   Box,Flex
 } from '@react-native-material/core';
 //@ts-ignore
-import trash from '@assets/icons/trash.png';
-import edit from '@assets/icons/edit.png';
+import trash from '../../../assets/icons/trash.png';
+import edit from '../../../assets/icons/edit.png';
 const ActionsButtons = () => {
 
   return (

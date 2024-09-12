@@ -1,12 +1,13 @@
 import {Image, Platform, StyleSheet, TouchableOpacity, View,Text} from "react-native";
 import React, { useState} from 'react';
-import DocumentPicker from "@components/DocumentPicker";
+import DocumentPicker from "../../components/DocumentPicker";
 //@ts-ignore
-import paperclip from '@assets/icons/paperclip.png'
+import paperclip from '../../assets/icons/paperclip.png'
 //@ts-ignore
-import cross from '@assets/icons/cross.png'
+import cross from '../../assets/icons/cross.png'
 //@ts-ignore
 import {Box} from "@react-native-material/core";
+
 const UploadAttachments=({uploadedPics=[], setUploadPics})=>{
   const [visible, setVisible] = useState(false);
 

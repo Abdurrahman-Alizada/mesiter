@@ -9,14 +9,17 @@ import {
 } from '@react-native-material/core';
 import DeviceInfo from "react-native-device-info";
 import {useNavigation} from "@react-navigation/native";
-import {AntDesign} from "@expo/vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 //@ts-ignore
-import tick from '@assets/icons/tick.png';
+import tick from '../../../assets/icons/tick.png';
+
 const TickButton = () => {
     const hasNotch = DeviceInfo.hasNotch();
     const navigation =useNavigation()
     return  <Box ph={10} mt={10}>
-        <TouchableOpacity onPress={()=>{navigation.navigate('AddMember' as never)}} activeOpacity={1} style={[styles.backArrow]}>
+{/* { name: "Main", params: { screen: "FreeflexerStack", params: { screen: "FreeflexerHomeScreen" } } } */}
+        {/* <TouchableOpacity onPress={()=>{navigation.navigate({name:"HomeStack",params: {name:"SettingRoutes", params:{ screen: 'AddMember'}}})}} activeOpacity={1} style={[styles.backArrow]}> */}
+        <TouchableOpacity onPress={()=>navigation.navigate({ name: "HomeStack", params: { screen: "SettingRoutes", params: { screen: "AddMember" } } })} activeOpacity={1} style={[styles.backArrow]}>
             <Image source={tick} style={{height:40,width:40}} resizeMode={'contain'} />
         </TouchableOpacity>
     </Box>

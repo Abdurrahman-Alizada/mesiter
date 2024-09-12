@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 //@ts-ignore
-import bell from "@assets/icons/bell.png";
+import bell from "../../assets/icons/bell.png";
 // @ts-ignore
-import clock from "@assets/icons/clock.png";
+import clock from "../../assets/icons/clock.png";
 // @ts-ignore
-import rightIcon from "@assets/icons/chevron-right.png";
+import rightIcon from "../../assets/icons/chevron-right.png";
 // @ts-ignore
 import { Divider } from "react-native-paper";
 import { Box } from "@react-native-material/core";
 import DatePicker from "react-native-date-picker";
-import { getDateByFormated, getHourFromDate } from "@utils/dateHelpers";
+import { getDateByFormated, getHourFromDate } from "../../utils/dateHelpers";
 import normalize from "../../utils/normalize";
 interface Types {
   iconName: string;

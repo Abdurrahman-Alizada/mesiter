@@ -8,11 +8,11 @@ import {
 } from 'react-native';
 import {Box, Text} from '@react-native-material/core';
 // @ts-ignore
-import paperclip from '@assets/icons/paperclip.png';
+import paperclip from '../../assets/icons/paperclip.png';
 // @ts-ignore
-import send from '@assets/icons/send.png';
+import send from '../../assets/icons/send.png';
 import { useDispatch, useSelector } from "react-redux";
-import { setConversation } from "../../redux/chatbot/chatActions";
+// import { setConversation } from "../../redux/chatbot/chatActions";
 // @ts-ignore
 
 
@@ -28,7 +28,7 @@ const SearchInput: React.FC<inputprops> = ({}): React.ReactElement => {
   const [numOfLines,setNumofLines] =useState(1)
 
   const conversation = useSelector(
-    state => state.chat.conversation && state.chat.conversation,
+    state => state?.chat?.conversation && state?.chat?.conversation,
   );
 
   const [value,setValue] =useState('')
@@ -79,7 +79,7 @@ const SearchInput: React.FC<inputprops> = ({}): React.ReactElement => {
     co
 
     const newconversation =[...conversation,newMsg,recMsg]
-      dispatch(setConversation(newconversation))
+      // dispatch(setConversation(newconversation))
     setValue('')
   }
 

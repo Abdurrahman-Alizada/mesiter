@@ -1,7 +1,8 @@
 import React,{useState} from "react";
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 
-import edit from '@assets/icons/edit.png'
+import edit from '../../assets/icons/edit.png'
+// import edit from '../../assets'
 import normalize from "../../utils/normalize";
 //table styling constants
 const largeWidth=200

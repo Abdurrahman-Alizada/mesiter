@@ -4,7 +4,7 @@ import SplashScreen from './src/screens/SplashScreen/SplashScreen';
 
 // import Onboarding from './src/screens/Onboarding/OnboardingScreen';
 
-// import MainStack from './src/navigation/MainStack';
+import TabNavigation from './src/navigation/TabNavigation';
 // import Auth from './src/navigation/AuthStack';
 
 import {store} from './src/redux/store';
@@ -31,7 +31,7 @@ import WelcomeScreenIndex from './src/screens/WelcomeScreen/WelcomeScreenIndex';
 import {LogBox, Platform} from 'react-native';
 import AuthStack from './src/navigation/AuthStack';
 // import BottomTabsStack from './src/navigation/BottomStack';
-// import HomeStack from './src/navigation/HomeStack';
+import HomeStack from './src/navigation/HomeStack';
 
 export const App = () => {
   const [isThemeDark, setIsThemeDark] = React.useState(false);
@@ -127,16 +127,21 @@ export const App = () => {
                 component={Onboarding}
                 options={{headerShown: false}}
               /> */}
-              {/* <Stack.Screen
+              <Stack.Screen
                 name="HomeStack"
                 component={HomeStack}
                 options={{headerShown: false}}
-              /> */}
-              {/* <Stack.Screen
-                name="BottomTabs"
-                component={BottomTabsStack}
-                options={{headerShown: false}}
-              /> */}
+              />
+              <Stack.Screen
+              name="TabNavigation"
+              component={TabNavigation}
+              options={{
+                cardStyleInterpolator: CardForFade,
+
+                headerShown: false,
+
+              }}
+          />
             </Stack.Navigator>
           </NavigationContainer>
         </PaperProvider>

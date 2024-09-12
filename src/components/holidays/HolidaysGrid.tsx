@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { getMonthNameFromDate, getTotalDaysofMonth } from "@utils/dateHelpers";
+import { getMonthNameFromDate, getTotalDaysofMonth } from "../../utils/dateHelpers";
 import { FlashList } from "@shopify/flash-list";
-import calender from "@assets/icons/calender.png";
-import HighPriority from "@assets/icons/HighPriority.png";
-import MediumPriority from "@assets/icons/MediumPriority.png";
+import calender from "../../assets/icons/calendar.png";
+import HighPriority from "../../assets/icons/HighPriority.png";
+import MediumPriority from "../../assets/icons/MediumPriority.png";
 
 import { useNavigation } from "@react-navigation/native";
 import normalize from "../../utils/normalize";

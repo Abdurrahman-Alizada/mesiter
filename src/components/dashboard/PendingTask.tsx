@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
-import SingleTask from "@components/dashboard/SingleTask";
+import SingleTask from "../profilecard/SingleTask";
 
 const PendingTask=()=>{
 

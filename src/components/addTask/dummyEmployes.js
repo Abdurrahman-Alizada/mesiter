@@ -1,5 +1,5 @@
 import {Image} from 'react-native'
-import empoloyes from '@assets/icons/employe.png'
+import empoloyes from '../../assets/icons/employe.png'
 export default  EmployeeData=[
     {
         id:1,

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import chevronRight from '@assets/icons/chevron-right.png'
-import cricleGreen from '@assets/icons/greenCircle.png'
+import chevronRight from '../../assets/icons/chevron-right.png'
+import cricleGreen from '../../assets/icons/greenCircle.png'
 
 import { FlashList } from "@shopify/flash-list";
-import SingleTask from "@components/profilecard/SingleTask";
+import SingleTask from "../../components/profilecard/SingleTask";
 import { useNavigation } from "@react-navigation/native";
 import normalize from "../../utils/normalize";
+
 const SingleEmployeCard = ({data}) => {
   const [isCollapse,setCollapse]=useState()
   const detailsdata=[
@@ -69,7 +70,7 @@ const SingleEmployeCard = ({data}) => {
 
         {/*// @ts-ignore*/}
       <View style={{position:'relative'}}>
-         <TouchableOpacity onPress={()=>navigation.navigate('EmployeeDetails' as never,{name:data.Name})}>
+         <TouchableOpacity onPress={()=>navigation.navigate({name:'HomeStack',params:{screen:"EmployeeDetails"}} as never,{name:data.Name})}>
 
         <Image  source={{uri:data.imgUri}} resizeMode={'contain'}
                style={styles.img}/>

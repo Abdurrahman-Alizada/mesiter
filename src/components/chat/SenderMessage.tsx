@@ -1,8 +1,9 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import senderImage from "@assets/sender.png";
+// import senderImage from "../../assets/sender.png";
+import senderImage from "../../assets/sender.png";
 
-import trash from "@assets/icons/trash.png";
+import trash from "../../assets/icons/trash.png";
 import normalize from "../../utils/normalize";
 const SenderMessage = ({msg}) => (
   <>

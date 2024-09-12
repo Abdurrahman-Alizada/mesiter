@@ -8,16 +8,16 @@ import {
 } from 'react-native';
 import {Box, Text} from '@react-native-material/core';
 // @ts-ignore
-import redClock from '@assets/icons/red-clock.png';
+import redClock from '../../assets/icons/red-clock.png';
 // @ts-ignore
-import greenClock from '@assets/icons/green-clock.png';
+import greenClock from '../../assets/icons/green-clock.png';
 // @ts-ignore
-import greenCalender from '@assets/icons/green-calender.png';
+import greenCalender from '../../assets/icons/green-calender.png';
 // @ts-ignore
 
-import redCalender from '@assets/icons//red-calender.png';
+import redCalender from '../../assets/icons/red-calender.png';
 import DatePicker from "react-native-date-picker";
-import { getDateByFormated, getHourFromDate, getHourWithMinutesFromDate } from "@utils/dateHelpers";
+import { getDateByFormated, getHourFromDate, getHourWithMinutesFromDate } from "../../utils/dateHelpers";
 import normalize from '../../utils/normalize';
 
 interface Types {

@@ -4,17 +4,15 @@ import * as yup from "yup";
 import {Formik} from "formik";
 import {Box} from "@react-native-material/core";
 import {sanFranciscoWeights} from "react-native-typography";
-import SingleInput from "@components/profilecard/SingleInput";
-import trash from '@assets/icons/trash.png';
+import SingleInput from "../../components/profilecard/SingleInput";
+import trash from '../../assets/icons/trash.png';
 import {useTranslation} from "react-i18next";
-import RoleDropDown from "@components/RoleDropDown";
-import {UserRoles} from "@config/constants";
-import RoleInput from "@components/profilecard/RoleInput";
+import RoleDropDown from "../../../components/RoleDropDown";
+// import {UserRoles} from "@config/constants";
+import RoleInput from "../../components/profilecard/RoleInput";
 import {showMessage} from "react-native-flash-message";
-import {DebugConsole} from "@utils/debuggingHelpers";
-import firestore from "@react-native-firebase/firestore";
+// import {DebugConsole} from "@utils/debuggingHelpers";
 import {UIActivityIndicator} from "react-native-indicators";
-import {CollectionConstant} from "../../firebase/CollectionsConstant";
 
 interface  Types{
     data?:[]
@@ -54,15 +52,7 @@ const UserForm:React.FC<Types> = ({data,deleteHandler=()=>{}}) => {
     const updateUserProfile= (values:any)=>{
 
         return new Promise((resolve,reject)=>{
-        //    updating user
-
-
-                        firestore()
-                            .collection(CollectionConstant.users)
-                            .doc(data?.docId)
-                            .update(values).then(()=>{
-                                resolve(true)
-                        }).catch((err)=>reject(err))
+     
 
 
 
