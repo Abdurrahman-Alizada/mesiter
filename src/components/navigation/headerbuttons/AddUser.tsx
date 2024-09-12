@@ -9,7 +9,7 @@ import {
 } from '@react-native-material/core';
 import {useNavigation} from "@react-navigation/native";
 //@ts-ignore
-import plusicon from '@assets/icons/userplus.png';
+import plusicon from '../../../assets/icons/userplus.png';
 const AddUser = () => {
     const navigation =useNavigation()
     return  <Box ph={10} mt={10}>

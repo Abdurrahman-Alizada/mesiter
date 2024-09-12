@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {Box, Text} from '@react-native-material/core';
 // @ts-ignore
-import edit from '@assets/icons/edit.png';
+import edit from '../../assets/icons/edit.png';
 
 import {useTheme} from "@react-navigation/native";
 import normalize from '../../utils/normalize';

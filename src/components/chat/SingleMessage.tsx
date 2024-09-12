@@ -1,8 +1,8 @@
 
 import {View,StyleSheet,Text ,Image} from 'react-native'
-import SenderMessage from "@components/chat/SenderMessage";
-import { ReceiverMessage } from "@components/chat/ReceiverMessage";
-import trash from '@assets/icons/trash.png'
+import SenderMessage from "../../components/chat/SenderMessage";
+import { ReceiverMessage } from "../../components/chat/ReceiverMessage";
+import trash from '../../assets/icons/trash.png'
 import normalize from '../../utils/normalize';
 const SingleMessage=({msg})=> {
 

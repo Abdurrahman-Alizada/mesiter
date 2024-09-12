@@ -3,10 +3,10 @@ import {
   StyleSheet,
   View,Image,Text
 } from 'react-native';
-import receiverImage from '@assets/receiver.png'
+import receiverImage from '../../assets/receiver.png'
 
-import senderImage from "@assets/sender.png";
-import trash from "@assets/icons/trash.png";
+import senderImage from "../../assets/sender.png";
+import trash from "../../assets/icons/trash.png";
 import normalize from '../../utils/normalize';
 export const ReceiverMessage = ({msg}) => {
 

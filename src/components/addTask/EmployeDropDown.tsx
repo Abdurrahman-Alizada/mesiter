@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 // @ts-ignore
-import { AntDesign } from "@expo/vector-icons";
+import AntDesign  from "react-native-vector-icons/AntDesign";
 
 import EmployeeData from "@components/addTask/dummyEmployes";
 interface PropsTypes {
@@ -17,11 +17,11 @@ interface PropsTypes {
   items: [];
 }
 
-import HighPriority from "@assets/icons/HighPriority.png";
-import lowPriority from "@assets/icons/lowPriority.png";
-import MediumPriority from "@assets/icons/MediumPriority.png";
-import bluecircle from "@assets/icons/bluecircle.png";
-import arrowDown from "@assets/icons/chevron-right.png";
+import HighPriority from "../../assets/icons/HighPriority.png";
+import lowPriority from "../../assets/icons/lowPriority.png";
+import MediumPriority from "../../assets/icons/MediumPriority.png";
+import bluecircle from "../../assets/icons/bluecircle.png";
+import arrowDown from "../../assets/icons/chevron-right.png";
 import { useFocusEffect } from "@react-navigation/native";
 import normalize from "../../utils/normalize";
 

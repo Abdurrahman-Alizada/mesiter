@@ -1,7 +1,7 @@
 import React from 'react';
 import {Dimensions, ScrollView, View} from 'react-native';
 import {Box, Divider, Flex, Wrap} from '@react-native-material/core';
-import normalize from '@utils/normalize';
+import normalize from '../../utils/normalize';
 import {Text} from '@react-native-material/core';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 const CciConflictSke = props => {

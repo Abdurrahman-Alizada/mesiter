@@ -2,11 +2,11 @@ import React,{useState} from "react";
 import { View, Text, StyleSheet, Image, ImageBackground } from "react-native";
 import { Box ,Flex} from "@react-native-material/core";
 // @ts-ignore
-import HighPriority from '@assets/icons/HighPriority.png'
+import HighPriority from '../../assets/icons/HighPriority.png'
 // @ts-ignore
-import LowPriority from '@assets/icons/lowPriority.png'
+import LowPriority from '../../assets/icons/lowPriority.png'
 // @ts-ignore
-import MediumPriority from '@assets/icons/MediumPriority.png'
+import MediumPriority from '../../assets/icons/MediumPriority.png'
 import normalize from "../../utils/normalize";
 
 

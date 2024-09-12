@@ -14,7 +14,7 @@ import email from '@assets/email.png'
 import phone from '@assets/phone.png'
 import {Box,Flex, Text} from "@react-native-material/core";
 import {sanFranciscoWeights} from "react-native-typography";
-import signout from "@assets/signout.png";
+import signout from "../../assets/signout.png";
 import normalize from '../../utils/normalize';
 interface  Types{
     visible:    boolean;

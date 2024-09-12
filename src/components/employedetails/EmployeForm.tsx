@@ -4,8 +4,9 @@ import * as yup from "yup";
 import {Formik} from "formik";
 import {Box} from "@react-native-material/core";
 import {sanFranciscoWeights} from "react-native-typography";
-import SingleInput from "@components/employedetails/SingleInput";
-import trash from '@assets/icons/trash.png';
+import SingleInput from "../../components/employedetails/SingleInput";
+import trash from '../../assets/icons/trash.png';
+
 const EmployeForm = () => {
   const validationSchema=yup.object().shape({
     // email:yup.string().label("email").required("Email is required").email('Insert a valid email addresss'),

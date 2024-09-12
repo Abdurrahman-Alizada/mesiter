@@ -1,12 +1,12 @@
 import React from 'react';
 //@ts-ignore
-import notificationIcon from '@assets/icons/notification.png'
+import notificationIcon from '../../../assets/icons/notification.png'
 import { Image, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 const Notifications = () => {
     const navigation = useNavigation()
     return (
-        <TouchableOpacity  onPress={()=>navigation.navigate('Notifications')} style={{marginRight:10, position:'relative',zIndex:-9999}}>
+        <TouchableOpacity  onPress={()=>navigation.navigate({name:"HomeStack", params: {screen:'Notifications'}})} style={{marginRight:10, position:'relative',zIndex:-9999}}>
             <View style={styles.notificationCount}>
                 <Text style={{color:'white'}}>2</Text>
             </View>

@@ -7,12 +7,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { getMonthNameFromDate, getTotalDaysofMonth } from "@utils/dateHelpers";
+import { getMonthNameFromDate, getTotalDaysofMonth } from "../../utils/dateHelpers";
 
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Swipeable from "react-native-gesture-handler/Swipeable";
-import { CollectionConstant } from "app/firebase/CollectionsConstant";
-import firestore from "@react-native-firebase/firestore";
 import normalize from "../../utils/normalize";
 const GridCalender = ({ date, tasks }) => {
   const navigation = useNavigation();

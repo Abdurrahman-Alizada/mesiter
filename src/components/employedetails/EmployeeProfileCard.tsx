@@ -2,13 +2,13 @@ import React from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 
 // @ts-ignore
-import Email from '@assets/icons/email_red.png'
-import phone from '@assets/icons/phone.png'
+import Email from '../../assets/icons/email_red.png'
+import phone from '../../assets/icons/phone.png'
 import { transform } from "@babel/core";
-import chervienRight from "@assets/icons/chevron-right.png";
+import chervienRight from "../../assets/icons/chevron-right.png";
 import { Flex ,Box } from "@react-native-material/core";
-import UserForm from "@components/profilecard/UserForm";
-import EmployeForm from "@components/employedetails/EmployeForm";
+import UserForm from "../../components/profilecard/UserForm";
+import EmployeForm from "../../components/employedetails/EmployeForm";
 import normalize from "../../utils/normalize";
 
 const EmployeeProfileCard = (props) => {

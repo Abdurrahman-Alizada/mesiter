@@ -2,11 +2,11 @@ import React from "react";
 import { Image, StyleSheet, Switch, Text, View } from "react-native";
 
 //@ts-ignore
-import oneWeekcalender from "@assets/icons/one-week-calender.png";
+import oneWeekcalender from "../../assets/icons/one-week-calender.png";
 // @ts-ignore
-import twoWeekcalender from "@assets/icons/two-week-calender.png";
+import twoWeekcalender from "../../assets/icons/two-week-calender.png";
 // @ts-ignore
-import sun from "@assets/icons/sun.png";
+import sun from "../../assets/icons/sun.png";
 import { Divider } from "react-native-paper";
 import { Box } from "@react-native-material/core";
 import normalize from "../../utils/normalize";

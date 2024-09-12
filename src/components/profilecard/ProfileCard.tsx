@@ -2,24 +2,21 @@ import {Image, Platform, StyleSheet, TouchableOpacity, View,Text} from "react-na
 import React, {useEffect, useState} from 'react';
 import { Button, Dialog, Portal } from 'react-native-paper';
 //@ts-ignore
-import Placeholder from '@assets/default_user.png'
+import Placeholder from '../../assets/default_user.png'
 // @ts-ignore
-import cameraIcon from '@assets/icons/camera.png'
+import cameraIcon from '../../assets/icons/camera.png'
 // @ts-ignore
-import * as ImagePicker from 'expo-image-picker';
+// import * as ImagePicker from 'expo-image-picker';
 
 import {Box, Flex} from "@react-native-material/core";
 //@ts-ignore
-import chervienRight from '@assets/icons/chevron-right.png'
+import chervienRight from '../../assets/icons/chevron-right.png'
 import {useFocusEffect, useTheme} from "@react-navigation/native";
-import UserForm from "@components/profilecard/UserForm";
+import UserForm from "../../components/profilecard/UserForm";
 import { useSelector } from "react-redux";
 import {useTranslation} from "react-i18next";
-import UploadSelection from "@components/dialogs/UploadSelection";
-import storage from '@react-native-firebase/storage';
-import {CollectionConstant} from "../../firebase/CollectionsConstant";
-import firestore from "@react-native-firebase/firestore";
-import { ProgressBar, MD3Colors } from 'react-native-paper';
+import UploadSelection from "../../components/dialogs/UploadSelection";
+
 import normalize from "../../utils/normalize";
 interface  Types{
     profileData:any;
@@ -40,64 +37,62 @@ const ProfileCard :React.FC <Types>=({deleteHandler,profileData={},isExtraInfo=f
 
 
     let user = useSelector(state => state.user.user);
-    const {email,role}  = user
+    // const {email,role}  = user
 
     useFocusEffect(
         React.useCallback(() => {
-            storage().ref(CollectionConstant.userImageDir+"/"+profileData?.docId+".png").getDownloadURL().then((res)=>{
-                setProfilePic(res)
-            }).catch((e)=>{})
+      
         }, [refresh])
     )
 
 
     const handleCameraPress = async () => {
 
-        let  { status } = await ImagePicker.requestCameraPermissionsAsync();
-        //
-        if (status === 'granted') {
-            const result = await ImagePicker.launchCameraAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                aspect: [1, 1],
-                quality: 1,
-            });
+        // let  { status } = await ImagePicker.requestCameraPermissionsAsync();
+        // //
+        // if (status === 'granted') {
+        //     const result = await ImagePicker.launchCameraAsync({
+        //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        //         allowsEditing: true,
+        //         aspect: [1, 1],
+        //         quality: 1,
+        //     });
 
 
-            if (!result.canceled) {
-                if(Array.isArray(result.assets)){
-                    if(result.assets[0].uri){
-                        updateUserImage(result.assets[0].uri)
-                        //setUploadPic(result.assets[0].uri);
+        //     if (!result.canceled) {
+        //         if(Array.isArray(result.assets)){
+        //             if(result.assets[0].uri){
+        //                 updateUserImage(result.assets[0].uri)
+        //                 //setUploadPic(result.assets[0].uri);
 
-                    }
-                }
-            }
-        }
+        //             }
+        //         }
+        //     }
+        // }
     };
 
     const handleFilePress = async () => {
         setVisible(false)
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status === 'granted') {
-            const result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                aspect: [1, 1],
-                quality: 1,
-            });
+        // const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        // if (status === 'granted') {
+        //     const result = await ImagePicker.launchImageLibraryAsync({
+        //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        //         allowsEditing: true,
+        //         aspect: [1, 1],
+        //         quality: 1,
+        //     });
 
-            if (!result.canceled) {
+        //     if (!result.canceled) {
 
-                if(Array.isArray(result.assets)){
-                    if(result.assets[0].uri){
-                        //setUploadPic(result.assets[0].uri);
-                        updateUserImage(result.assets[0].uri)
+        //         if(Array.isArray(result.assets)){
+        //             if(result.assets[0].uri){
+        //                 //setUploadPic(result.assets[0].uri);
+        //                 updateUserImage(result.assets[0].uri)
 
-                    }
-                }
-            }
-        }
+        //             }
+        //         }
+        //     }
+        // }
     };
 
 
@@ -183,7 +178,7 @@ const ProfileCard :React.FC <Types>=({deleteHandler,profileData={},isExtraInfo=f
             </View>
             {/*//Role and usename*/}
             <View style={{justifyContent:'center',alignItems:'center',marginTop:5}}>
-                <Text style={styles.userName}>{ profileData.hasOwnProperty('name') ? profileData.name :'Employ or Manager name'}</Text>
+                <Text style={styles.userName}>{ profileData?.hasOwnProperty('name') ? profileData.name :'Employ or Manager name'}</Text>
                 { profileData?.role === '1' ?
                 <Text style={styles.userRole}>Admin</Text>
                 :

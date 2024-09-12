@@ -3,12 +3,12 @@ import { Text, useWindowDimensions, View, StyleSheet, FlatList, TouchableOpacity
 import { SceneMap,TabBar} from 'react-native-tab-view';
 import { useTheme } from "@react-navigation/native";
 
-import CompletedTask from "@components/dashboard/CompletedTask";
-import InProcessTask from "@components/dashboard/InProcessTask";
-import PendingTask from "@components/dashboard/PendingTask";
-import SingleTask from "@components/dashboard/SingleTask";
+import CompletedTask from '../dashboard/CompletedTask';
+import InProcessTask from '../dashboard/InProcessTask';
+import PendingTask from '../dashboard/PendingTask';
+import SingleTask from '../dashboard/SingleTask';
 import { FlashList } from "@shopify/flash-list";
-import Attendence from "@components/taskdetails/Attendence";
+import Attendence from '../taskdetails/Attendence';
 import normalize from '../../utils/normalize';
 
 

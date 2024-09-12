@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 //@ts-ignore
-import redCalender from "@assets/icons/calendar2.png";
+import redCalender from "../../assets/icons/calendar2.png";
 import DatePicker from "react-native-date-picker";
 import normalize from "../../utils/normalize";
 

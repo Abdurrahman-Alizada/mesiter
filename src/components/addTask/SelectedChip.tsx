@@ -2,9 +2,9 @@ import React from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 
 //@ts-ignore
-import user from "@assets/default_user.png";
+import user from "../../assets/default_user.png";
 //@ts-ignore
-import trash from "@assets/icons/trash.png";
+import trash from "../../assets/icons/trash.png";
 import normalize from "../../utils/normalize";
 interface Types {
   employeData: object;

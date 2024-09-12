@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Text, useWindowDimensions, View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
-import { SceneMap,TabBar} from 'react-native-tab-view';
+import { Text, useWindowDimensions, View, StyleSheet, TouchableOpacity } from "react-native";
+import { SceneMap} from 'react-native-tab-view';
 import { useTheme } from "@react-navigation/native";
 
-import CompletedTask from "@components/dashboard/CompletedTask";
-import InProcessTask from "@components/dashboard/InProcessTask";
-import PendingTask from "@components/dashboard/PendingTask";
+import CompletedTask from './CompletedTask';
+import InProcessTask from './InProcessTask';
+import PendingTask from './PendingTask';
 import normalize from '../../utils/normalize';
 
 

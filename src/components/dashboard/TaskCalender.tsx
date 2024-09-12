@@ -9,21 +9,19 @@ import {
 } from "react-native";
 
 //@ts-ignore
-import redCalender from "@assets/icons/calendar2.png";
+import redCalender from "../../assets/icons/calendar2.png";
 //@ts-ignore
-import search from "@assets/icons/search.png";
+import search from "../../assets/icons/search.png";
 //@ts-ignore
-import grid from "@assets/icons/grid.png";
+import grid from "../../assets/icons/grid.png";
 //@ts-ignore
-import Bluegrid from "@assets/icons/blue-grid.png";
-import { getMonthNameFromDate, getTotalDaysofMonth } from "@utils/dateHelpers";
+import Bluegrid from "../../assets/icons/blue-grid.png";
+import { getMonthNameFromDate, getTotalDaysofMonth } from "../../utils/dateHelpers";
 import DatePicker from "react-native-date-picker";
-import GridCalender from "@components/dashboard/GridCalender";
-import HorizantalCalender from "@components/dashboard/HorizantalCalender";
+import GridCalender from "../../components/dashboard/GridCalender";
+import HorizantalCalender from "../../components/dashboard/HorizantalCalender";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { useFocusEffect } from "@react-navigation/native";
-import { CollectionConstant } from "app/firebase/CollectionsConstant";
-import firestore from "@react-native-firebase/firestore";
 import normalize from "../../utils/normalize";
 
 const TaskCalender = () => {
@@ -47,39 +45,7 @@ const TaskCalender = () => {
   const [tasks, setTasks] = useState([]);
   useFocusEffect(
     React.useCallback(() => {
-      const fetchTasks = async () => {
-        try {
-          const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-          const endOfMonth = new Date(
-            date.getFullYear(),
-            date.getMonth() + 1,
-            0,
-            23,
-            59,
-            59
-          );
-
-          const querySnapshot = await firestore()
-            .collection(CollectionConstant.tasks)
-            .where("startTime", ">=", startOfMonth)
-            .where("startTime", "<=", endOfMonth)
-            .get();
-
-          const temp = [];
-          querySnapshot.forEach((documentSnapshot) => {
-            temp.push({
-              ...documentSnapshot.data(),
-              docId: documentSnapshot.id,
-            });
-          });
-          // console.log("temp", temp);
-          setTasks([...temp]);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-
-      fetchTasks();
+    
     }, [date])
   );
 
