@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 // @ts-ignore
-import AntDesign  from "react-native-vector-icons/AntDesign";
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import EmployeeData from "@components/addTask/dummyEmployes";
 interface PropsTypes {

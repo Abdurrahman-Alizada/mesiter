@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Keyboard, StyleSheet, TouchableOpacity, View,Text} from "react-native";
 import {Box} from "@react-native-material/core";
-import { AntDesign } from '@expo/vector-icons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {sanFranciscoWeights} from "react-native-typography";
 import normalize from "../../utils/normalize";
 import {TextInput} from "react-native-paper";

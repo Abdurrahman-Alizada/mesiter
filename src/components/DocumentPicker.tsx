@@ -6,7 +6,7 @@ interface Types{
   setVisible:Function;
   setImage:Function;
 }
-// import { AntDesign } from '@expo/vector-icons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import normalize from "../utils/normalize";
 
 const DocumentPicker:React.FC<Types> = ({visible=false,setVisible=()=>{},setImage=()=>{}}) => {
@@ -61,7 +61,7 @@ const DocumentPicker:React.FC<Types> = ({visible=false,setVisible=()=>{},setImag
           </View>
           <View style={{marginLeft:normalize(30)}}>
             <TouchableOpacity onPress={() =>handleFilePress()}>
-              {/* <AntDesign name="folder1" size={36} style={{marginLeft:5}} color="#40302A" /> */}
+              <AntDesign name="folder1" size={36} style={{marginLeft:5}} color="#40302A" />
               <Text style={{color:"#40302A" ,marginTop:10}}>Gallery</Text>
             </TouchableOpacity>
           </View>
