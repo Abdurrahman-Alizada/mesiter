@@ -1,0 +1,32 @@
+{
+  "translation": {
+    "add-new-member": "Add New Member",
+    "name": "Name",
+    "name-of-person": "Name of Person",
+    "role": "Role",
+    "phone": "Phone",
+    "email": "Email",
+    "app-login-password": "App Login Password",
+    "add-to-app": "Add to App",
+    "task-created-successfully": "Task Created Successfully",
+    "something-went-wrong": "Something went wrong, try again later",
+    "password-validation-error": "Password must contain at least one uppercase letter and one special character",
+    "password-required": "Password is required",
+    "name-required": "Name of Person is required",
+    "role-required": "Role is required",
+    "phone-required": "Phone Number is required",
+    "email-required": "Email is required",
+    "email-invalid": "Please enter a valid email",
+    "total-staff": "Total Staff",
+    "search": "Search",
+    "person": "Person",
+    "Profile-Photo": "Profile Photo",
+    "Settings": "Settings",
+    "Employs": "Employs",
+    "Vacations": "Vacations",
+    "Holidays": "Holidays",
+    "Notifications": "Notifications",
+    "Language": "Language",
+    "Log out": "Log out"
+  }
+}

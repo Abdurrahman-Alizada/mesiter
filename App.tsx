@@ -1,6 +1,7 @@
 import React, {useCallback, useMemo} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import SplashScreen from './src/screens/SplashScreen/SplashScreen';
+import './locales/i18next';
 
 // import Onboarding from './src/screens/Onboarding/OnboardingScreen';
 

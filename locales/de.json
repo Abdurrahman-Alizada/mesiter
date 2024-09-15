@@ -1,0 +1,32 @@
+{
+  "translation": {
+    "add-new-member": "Neues Mitglied hinzufügen",
+    "name": "Name",
+    "name-of-person": "Name der Person",
+    "role": "Rolle",
+    "phone": "Telefon",
+    "email": "E-Mail",
+    "app-login-password": "App-Anmeldepasswort",
+    "add-to-app": "Zur App hinzufügen",
+    "task-created-successfully": "Aufgabe erfolgreich erstellt",
+    "something-went-wrong": "Etwas ist schiefgelaufen, versuchen Sie es später noch einmal",
+    "password-validation-error": "Das Passwort muss mindestens einen Großbuchstaben und ein Sonderzeichen enthalten",
+    "password-required": "Passwort ist erforderlich",
+    "name-required": "Der Name der Person ist erforderlich",
+    "role-required": "Rolle ist erforderlich",
+    "phone-required": "Telefonnummer ist erforderlich",
+    "email-required": "E-Mail ist erforderlich",
+    "email-invalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+    "total-staff": "Gesamtes Personal",
+    "search": "Suche",
+    "person": "Person",
+    "Profile-Photo": "Profilfoto",
+    "Settings": "Einstellungen",
+    "Employs": "Mitarbeiter",
+    "Vacations": "Urlaub",
+    "Holidays": "Feiertage",
+    "Notifications": "Benachrichtigungen",
+    "Language": "Sprache",
+    "Log out": "Abmelden"
+  }
+}
