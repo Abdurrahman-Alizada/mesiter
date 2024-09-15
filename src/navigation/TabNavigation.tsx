@@ -7,7 +7,7 @@ import home from '../assets/icons/home.png'
 import plusicon from '../assets/icons/plusicon.png'
 const Tab = createBottomTabNavigator();
 
-// import { AntDesign } from '@expo/vector-icons';
+// import AntDesign from 'react-native-vector-icons/AntDesign';
 
 
 import DashboardContainer from '../screens/Dashboard/DashboardContainer';

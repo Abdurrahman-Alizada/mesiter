@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {View, Text, Image,TouchableOpacity,StyleSheet} from 'react-native'
 // @ts-ignore
-// import { AntDesign } from '@expo/vector-icons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 interface PropsTypes {
     picker?: any;

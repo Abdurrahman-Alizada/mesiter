@@ -3,8 +3,8 @@
 import React, {useState} from 'react';
 import {Keyboard, StyleSheet, TouchableOpacity, View,Text} from "react-native";
 import {Box} from "@react-native-material/core";
-// import { AntDesign } from '@expo/vector-icons';
-import AntDesign  from 'react-native-vector-icons/AntDesign'; // Import AntDesign icons from react-native-vector-icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
+// import AntDesign  from 'react-native-vector-icons/AntDesign'; // Import AntDesign icons from react-native-vector-icons
 
 import {sanFranciscoWeights} from "react-native-typography";
 

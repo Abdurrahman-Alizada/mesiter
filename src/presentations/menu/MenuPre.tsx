@@ -71,7 +71,8 @@ const MenuPre = () => {
               </Box>
               <View style={[styles.card,{backgroundColor:'#FFFEFA',margin:10,borderRadius:10, padding: 24, paddingTop: 24, paddingRight: 16, paddingBottom: 24, paddingLeft: 16}]}>
                   <Box >
-                      { user?.role==="employee" &&
+                      {/* { user?.role==="employee" && */}
+                      { true &&
                         <>
                       <List.Item
                         title="Employs"

@@ -9,7 +9,7 @@ import {
 } from '@react-native-material/core';
 import DeviceInfo from "react-native-device-info";
 import {useNavigation} from "@react-navigation/native";
-import AntDesign from "react-native-vector-icons/AntDesign";
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const BackArrow = () => {
     const hasNotch = DeviceInfo.hasNotch();
