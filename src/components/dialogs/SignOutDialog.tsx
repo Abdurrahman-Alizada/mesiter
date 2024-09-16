@@ -15,11 +15,11 @@ import phone from '../../assets/phone.png'
 import {Box,Flex, Text} from "@react-native-material/core";
 import {sanFranciscoWeights} from "react-native-typography";
 import { CommonActions, useNavigation } from "@react-navigation/native";
-// import * as SecureStore from "expo-secure-store";
-// import {StoreKeys} from "@config/constants";
 import {useDispatch} from "react-redux";
 // import {setUser} from "../../redux/user/userActions";
 import normalize from '../../utils/normalize';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StoreKeys } from '../../config/constants';
 interface  Types{
   visible:    boolean;
   setVisible:React.Dispatch<React.SetStateAction<any>>;
@@ -30,8 +30,8 @@ const SignOutDialog :React.FC<Types>= ({visible=false,setVisible=()=>{}}) => {
   const dispatch=useDispatch()
   const signOut = async ()=>{
     // navigation.navigate('Access' as never)
-    await  SecureStore.deleteItemAsync(StoreKeys.UserData)
-    dispatch(setUser({},false))
+    await  AsyncStorage.removeItem(StoreKeys.UserData)
+    // dispatch(setUser({},false))
     setVisible(false)
 
   }

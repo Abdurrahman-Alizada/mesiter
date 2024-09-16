@@ -20,7 +20,6 @@ import { getMonthNameFromDate, getTotalDaysofMonth } from "../../utils/dateHelpe
 import DatePicker from "react-native-date-picker";
 import GridCalender from "../../components/dashboard/GridCalender";
 import HorizantalCalender from "../../components/dashboard/HorizantalCalender";
-import Swipeable from "react-native-gesture-handler/Swipeable";
 import { useFocusEffect } from "@react-navigation/native";
 import normalize from "../../utils/normalize";
 
@@ -43,9 +42,96 @@ const TaskCalender = () => {
   ];
   const [date, setDate] = useState(new Date());
   const [tasks, setTasks] = useState([]);
+  const dummyTasks = [
+    {
+      taskId: 1,
+      taskHeading: "Team Meeting",
+      startDate: {
+        seconds: Math.floor(new Date(2024, 8, 1).getTime() / 1000), // Date: 1st September 2024
+        nanoseconds: 0,
+      },
+      priority: "High",
+      location: "Meeting Room 1",
+    },
+    {
+      taskId: 2,
+      taskHeading: "Project Review",
+      startDate: {
+        seconds: Math.floor(new Date(2024, 8, 3).getTime() / 1000), // Date: 3rd September 2024
+        nanoseconds: 0,
+      },
+      priority: "Medium",
+      location: "Online Zoom",
+    },
+    {
+      taskId: 3,
+      taskHeading: "Client Call",
+      startDate: {
+        seconds: Math.floor(new Date(2024, 8, 5).getTime() / 1000), // Date: 5th September 2024
+        nanoseconds: 0,
+      },
+      priority: "Low",
+      location: "Office Room 2",
+    },
+    {
+      taskId: 4,
+      taskHeading: "Code Review",
+      startDate: {
+        seconds: Math.floor(new Date(2024, 8, 7).getTime() / 1000), // Date: 7th September 2024
+        nanoseconds: 0,
+      },
+      priority: "High",
+      location: "Conference Room",
+    },
+    {
+      taskId: 5,
+      taskHeading: "Design Meeting",
+      startDate: {
+        seconds: Math.floor(new Date(2024, 8, 10).getTime() / 1000), // Date: 10th September 2024
+        nanoseconds: 0,
+      },
+      priority: "Medium",
+      location: "Design Lab",
+    },
+    {
+      taskId: 6,
+      taskHeading: "Release Planning",
+      startDate: {
+        seconds: Math.floor(new Date(2024, 8, 15).getTime() / 1000), // Date: 15th September 2024
+        nanoseconds: 0,
+      },
+      priority: "High",
+      location: "Main Hall",
+    },
+    {
+      taskId: 7,
+      taskHeading: "Sprint Review",
+      startDate: {
+        seconds: Math.floor(new Date(2024, 8, 17).getTime() / 1000), // Date: 17th September 2024
+        nanoseconds: 0,
+      },
+      priority: "Low",
+      location: "Conference Room",
+    },
+    {
+      taskId: 8,
+      taskHeading: "Marketing Strategy",
+      startDate: {
+        seconds: Math.floor(new Date(2024, 8, 20).getTime() / 1000), // Date: 20th September 2024
+        nanoseconds: 0,
+      },
+      priority: "High",
+      location: "Marketing Office",
+    },
+  ];
+  
+  // Example of dummy data for DatePicker
+  const dummyDate = new Date(2024, 8, 1); // September 1, 2024
+  
   useFocusEffect(
     React.useCallback(() => {
-    
+    setTasks(dummyTasks)
+    // setDate(dummyDate)
     }, [date])
   );
 

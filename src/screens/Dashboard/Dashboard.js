@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const user = useSelector((state) => state?.user);
-
+console.log("first sdf bsdfg",user)
   return (
     <View style={{ backgroundColor: "#F6F6F6", flex: 1 }}>
       <Box ph={10} mt={10}>
@@ -36,7 +36,7 @@ const Dashboard = () => {
             textTransform: "capitalize",
           }}
         >
-          {user?.user?.name}
+          {user?.user?.name}"fsadfsf"
         </Text>
       </Box>
 

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {Box, Text} from "@react-native-material/core";
+import { Box, Text } from "@react-native-material/core";
 // @ts-ignore
 import email from "../assets/email.png";
 // @ts-ignore
@@ -14,37 +14,42 @@ import password from "../assets/password.png";
 // @ts-ignore
 import location from "../assets/icons/location.png";
 // @ts-ignore
-
-import passwordhidden from "../assets/passwordhide.png";
+import passwordhide from "../assets/passwordhide.png";
+// @ts-ignore
+import passwordhidden from "../assets/passwordhidden.png";
 
 interface IconsList {
   [key: string]: any;
 }
 
-const icons_list: IconsList = {email, password, location};
+const icons_list: IconsList = { email, password, location };
 
 interface inputprops {
   isRightIcon?: boolean;
   isLeftIcon?: boolean;
-  iconName?: any;
+  LeftIcon?: any;
+  RightIcon?: any;
   formikProps: any;
   formiKey: string;
   borderColor?: string;
   textColor?: string;
+  secsecureTextEntry?: string;
   [key: string]: any;
 }
 
 const CustomTextInput: React.FC<inputprops> = ({
   isRightIcon = false,
   isLeftIcon = false,
-  iconName,
+  LeftIcon,
+  RightIcon,
   formiKey,
   formikProps,
   borderColor = "#F6F6F6",
   textColor = "#22609D",
+  secureTextEntry,
   ...rest
 }): React.ReactElement => {
-  const [sec, setSec] = useState(true);
+  const [sec, setSec] = useState(secureTextEntry);
   const ref = useRef(null);
   let Inputstyles = {
     flexDirection: "row",
@@ -66,17 +71,18 @@ const CustomTextInput: React.FC<inputprops> = ({
     <>
       {/*//@ts-ignore*/}
       <View style={Inputstyles}>
-        {isLeftIcon && (
+        {LeftIcon && (
           <Image
-            source={icons_list[iconName]}
-            style={{height: 20, width: 20}}
+            source={icons_list[LeftIcon]}
+            // source={LeftIcon}
+            style={{ height: 20, width: 20 }}
           />
         )}
         <PaperInputText
           ref={ref}
           style={[
             styles.input,
-            {color: textColor, fontFamily: "Poppins-Regular"},
+            { color: textColor, fontFamily: "Poppins-Regular" },
           ]}
           // onFocus={()=>setFocus()}
           value={formikProps.values[formiKey]}
@@ -90,7 +96,10 @@ const CustomTextInput: React.FC<inputprops> = ({
           style={styles.iconContainer}
           onPress={() => setSec(!sec)}>
           {isRightIcon && (
-            <Image source={passwordhidden} style={{height: 30, width: 20}} />
+            <Image
+              source={sec ? passwordhidden : passwordhide}
+              style={{ height: 24, width: 24 }}
+            />
           )}
         </TouchableOpacity>
       </View>
