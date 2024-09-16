@@ -29,7 +29,7 @@ const DashboardPre = () => {
             lineHeight: 20,
             letterSpacing: 0.25,
             fontWeight: "400",
-            fontSize: normalize(13),
+            fontSize: normalize(12),
             textTransform: "capitalize",
           }}>
           {user?.fullName}

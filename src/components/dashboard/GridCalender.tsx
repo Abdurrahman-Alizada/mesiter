@@ -60,7 +60,8 @@ const GridCalendar = ({ date, tasks }) => {
 
   const TaskHeader = ({ title, taskId }) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate("TaskDetails", { taskId })}
+    onPress={() => navigation.navigate("HomeStack", { screen: "TaskDetails", params: { taskId: taskId } })}
+    // onPress={() => navigation.navigate("TaskDetails", { taskId })}
       style={styles.taskHeader}>
       <Text style={styles.taskTitle}>{title}</Text>
     </TouchableOpacity>

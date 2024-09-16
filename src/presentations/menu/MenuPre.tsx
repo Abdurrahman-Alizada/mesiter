@@ -32,7 +32,8 @@ const MenuPre = () => {
     const [signOutVisible, setSignOutVisible] = useState(false);
     const [languageVisible, setLanguageVisible] = useState(false);
 
-    let user = useSelector(state => state?.user?.user);
+    let user = useSelector(state => state?.user?.currentLoginUser);
+    console.log("user",user)
 
     return (
         <>
@@ -52,7 +53,7 @@ const MenuPre = () => {
                     <View style={[styles.card, { backgroundColor: '#FFFEFA', margin: 10, borderRadius: 10, padding: 16 }]}>
                         <Box>
                             {/* Show Employs only if needed */}
-                            {true && (
+                            {user?.role === "admin" && (
                                 <>
                                     <List.Item
                                         title={t("Employs")}

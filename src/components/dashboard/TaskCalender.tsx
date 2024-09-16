@@ -131,7 +131,6 @@ const TaskCalender = () => {
   useFocusEffect(
     React.useCallback(() => {
     setTasks(dummyTasks)
-    // setDate(dummyDate)
     }, [date])
   );
 
@@ -186,7 +185,7 @@ const TaskCalender = () => {
       )}
 
       <DatePicker
-        maximumDate={new Date()}
+        // maximumDate={new Date()}
         modal
         mode={"date"}
         open={open}

@@ -51,6 +51,11 @@ export const userApi = createApi({
       query: () => `/user/currentLoginUser`,
       providesTags: ['CurrentLoginUser'],
     }),
+
+    getAllUsers: build.query({
+      query: () => `/user/getAll`,
+      providesTags: ['CurrentLoginUser'],
+    }),
   
     updateUser: build.mutation({
       query: user => ({
@@ -79,6 +84,7 @@ export const userApi = createApi({
 export const {
   useLoginUserMutation,
   useGetCurrentLoginUserQuery,
+  useGetAllUsersQuery,
   useAddUserByAdminMutation,
   useDeleteUserByItselfMutation,
   useUpdateUserMutation,

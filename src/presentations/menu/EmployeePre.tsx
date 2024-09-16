@@ -9,6 +9,7 @@ import { FlashList } from "@shopify/flash-list";
 import { useTranslation } from "react-i18next";
 import EmployeeCardShimmer from "../../components/shimmers/EmployeeCardShimmer";
 import { showMessage } from "react-native-flash-message";
+import { useGetAllUsersQuery } from "../../redux/reducers/user/userThunk";
 
 const EmployeePre = () => {
   const { colors } = useTheme();
@@ -16,42 +17,17 @@ const EmployeePre = () => {
   const [isLoaded, setLoaded] = useState(true);
 
   const { t } = useTranslation();
+  const { data, isError, error, isLoading, isFetching, refetch } =
+    useGetAllUsersQuery();
 
   const [useData, setData] = useState([]);
-  const filteredData = useData.filter((item) =>
-    item?.name?.toLowerCase().startsWith(searchQuery.toLowerCase())
-  );
-  const [refresh, seRefresh] = useState(true);
+  // const filteredData = data?.users?.filter(item =>
+  //   item?.name?.toLowerCase().startsWith(searchQuery.toLowerCase()),
+  // );
+  const filteredData = data?.users
+  console.log("first",filteredData,error)
 
-  useFocusEffect(
-    React.useCallback(() => {
-      try {
-        firestore()
-          .collection(CollectionConstant.users)
-          .get()
-          .then((querySnapshot) => {
-            const temp = [];
-
-            querySnapshot.forEach((documentSnapshot) => {
-              temp.push({
-                ...documentSnapshot.data(),
-                docId: documentSnapshot.id,
-              });
-            });
-            // console.log(temp)
-            setData(temp);
-            setLoaded(false);
-          });
-      } catch (e) {
-        setData([]);
-        setLoaded(false);
-      }
-    }, [refresh])
-  );
-
-  const deleteUser = (data) => {
-   
-  };
+  const deleteUser = data => {};
 
   const onChangeSearch = (query: any) => setSearchQuery(query);
   return (
@@ -66,8 +42,7 @@ const EmployeePre = () => {
               fontWeight: "400",
               opacity: 0.85,
             },
-          ]}
-        >
+          ]}>
           {t("total-staff")}
         </Text>
         <Text
@@ -79,16 +54,15 @@ const EmployeePre = () => {
               marginLeft: 4,
               fontWeight: "600",
             },
-          ]}
-        >
-          {useData.length}
+          ]}>
+          {data?.users?.length}
         </Text>
       </Flex>
       <Box mt={15} ph={20}>
         <Searchbar
           // placeholder={t("Search person, phone & email"}
           placeholder={`${t("search")}, ${t("person")}, ${t("phone")},${t(
-            "email"
+            "email",
           )} `}
           onChangeText={onChangeSearch}
           value={searchQuery}
@@ -106,8 +80,8 @@ const EmployeePre = () => {
 
       <View>
         <Box ph={10}>
-          {isLoaded ? (
-            <EmployeeCardShimmer isLoaded={isLoaded}></EmployeeCardShimmer>
+          {isLoading ? (
+            <EmployeeCardShimmer isLoaded={isLoading}></EmployeeCardShimmer>
           ) : (
             <FlatList
               contentContainerStyle={{ paddingBottom: 150 }}
