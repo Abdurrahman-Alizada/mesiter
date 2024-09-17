@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import normalize from "../../utils/normalize";
 import { Formik } from "formik";
 import { Box } from "@react-native-material/core";
 import CustomTextInput from "../../components/CustomTextInput";
-
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as yup from "yup";
 import PriorityDropDown from "../../components/PriorityDropDown";
@@ -17,9 +16,9 @@ import CustomDatePicker from "../../components/addTask/CustomDatePicker";
 import UploadAttachments from "../../components/addTask/UploadAttachments";
 import { UIActivityIndicator } from "react-native-indicators";
 import { useFocusEffect } from "@react-navigation/native";
-//@ts-ignore
 import TrashIcon from "../../assets/icons/trash.png";
 import { showMessage } from "react-native-flash-message";
+import { useAddTaskMutation } from "../../redux/reducers/task/taskThunk";
 
 const initialValues = {
   taskHeading: "",
@@ -37,71 +36,39 @@ const initialValues = {
   endDate: new Date(),
   endTime: new Date(),
   attachments: [],
-  status: "inprogress", // Task may be "completed" or "not started"
+  status: "inprogress",
 };
 
 const AddTaskPre = () => {
-  const [picker, setPicker] = useState("");
   const [employes, setEmployes] = useState([]);
-  const [weekToggle, setWeekToggle] = React.useState(false);
-  const [towWeekToggle, setTwoWeekToggle] = React.useState(false);
-  const [dayToggle, setdayToggle] = React.useState(false);
   const [uploadedPics, setUploadPics] = useState([]);
   const [items, setItems] = useState([]);
-  const [isLoaded, setLoaded] = useState(true);
-
-  useFocusEffect(
-    React.useCallback(() => {
-     
-    }, [])
-  );
+  
+  const [addTask, { isLoading, isError, isSuccess, error }] =
+    useAddTaskMutation();
 
   const validationSchema = yup.object().shape({
     taskHeading: yup.string().required("Task Heading required"),
     location: yup.string().required("Location Heading required"),
-    description: yup.string().required("Description  required"),
-    priority: yup.string().required("Priority is  required"),
-    remainder: yup.string().required("This Field is  required"),
-    holidays: yup.string().required("This Field is  required"),
-    startDate: yup.string().required("This Field is  required"),
-    startTime: yup.string().required("This Field is  required"),
-    endDate: yup.string().required("This Field is  required"),
-    endTime: yup.string().required("This Field is  required"),
+    description: yup.string().required("Description required"),
+    priority: yup.string().required("Priority is required"),
+    remainder: yup.string().required("This Field is required"),
+    holidays: yup.string().required("This Field is required"),
+    startDate: yup.string().required("This Field is required"),
+    startTime: yup.string().required("This Field is required"),
+    endDate: yup.string().required("This Field is required"),
+    endTime: yup.string().required("This Field is required"),
     assignTo: yup.array().min(0).required("Assign the task to a user"),
   });
 
-  const handleSubmit = async (values, actions) => {
-    // Assuming you have an array of image URIs in values.uploadedImages
-    console.log("values", values);
-    if (uploadedPics && uploadedPics?.length > 0) {
-      try {
-        const result = await Promise.all(
-          uploadedPics.map(async (imageUri) => {
-            try {
-              const storageRef = storage().ref(
-                `${CollectionConstant.tasksImages}/${imageUri}`
-              );
-              await storageRef.putFile(imageUri);
-              const downloadUrl = await storageRef.getDownloadURL();
-              return downloadUrl;
-            } catch (error) {
-              console.error("Error uploading image: ", error);
-              throw new Error("Failed to upload image");
-            }
-          })
-        );
-        console.log("result", result);
+  const handleSubmit = async (values: any, actions: any) => {
+    try {
+      const response = await addTask({
+        ...values,
+        attachments: uploadedPics // Add attachments if any
+      })
 
-        await firestore()
-          .collection(CollectionConstant.tasks)
-          .add({
-            ...values,
-            attachments: result,
-          })
-          .then(() => console.log("doc added"));
-
-        actions.setSubmitting(false);
-
+      if (response) {
         showMessage({
           message: "Task Created Successfully",
           type: "success",
@@ -111,58 +78,26 @@ const AddTaskPre = () => {
           icon: "success",
           duration: 6000,
         });
-
-        actions.resetForm(initialValues);
-      } catch (error) {
-        console.error("Error:", error?.message);
-        actions.setSubmitting(false);
-        showMessage({
-          message: "Something went wrong, please try again later",
-          type: "danger",
-          animated: true,
-          animationDuration: 200,
-          statusBarHeight: -10,
-          icon: "success",
-          duration: 6000,
-        });
-        // Handle error or show an alert message
+        actions.resetForm();
       }
-    } else {
-      try {
-        await firestore().collection(CollectionConstant.tasks).add(values);
-        actions.setSubmitting(false); // Assuming the submission was successful
-
-        showMessage({
-          message: "User Created Successfully",
-          type: "success",
-          animated: true,
-          animationDuration: 200,
-          statusBarHeight: -10,
-          icon: "success",
-          duration: 6000,
-        });
-
-        actions.resetForm(initialValues);
-      } catch (error) {
-        console.error("Error:", error?.message);
-        actions.setSubmitting(false);
-        showMessage({
-          message: "Something went wrong, please try again later",
-          type: "danger",
-          animated: true,
-          animationDuration: 200,
-          statusBarHeight: -10,
-          icon: "success",
-          duration: 6000,
-        });
-        // Handle error or show an alert message
-      }
+    } catch (error) {
+      console.error("Error:", error.message);
+      showMessage({
+        message: "Something went wrong, please try again later",
+        type: "danger",
+        animated: true,
+        animationDuration: 200,
+        statusBarHeight: -10,
+        icon: "success",
+        duration: 6000,
+      });
+    } finally {
+      actions.setSubmitting(false);
     }
   };
 
-  //remove the employee from the
-  const removeEmploy = (valueToRemove: any) => {
-    const temp = employes.filter((e) => e.id != valueToRemove);
+  const removeEmploy = valueToRemove => {
+    const temp = employes.filter(e => e.id !== valueToRemove);
     setEmployes(temp);
   };
 
@@ -173,22 +108,18 @@ const AddTaskPre = () => {
         enableOnAndroid={true}
         resetScrollToCoords={{ x: 0, y: 0 }}
         contentContainerStyle={{ flexGrow: 1 }}
-        scrollEnabled={true}
-      >
+        scrollEnabled={true}>
         <View
-          style={[styles.card, { backgroundColor: "white", paddingBottom: 2 }]}
-        >
+          style={[styles.card, { backgroundColor: "white", paddingBottom: 2 }]}>
           <Formik
             initialValues={initialValues}
             onSubmit={(values, actions) => handleSubmit(values, actions)}
-            validationSchema={validationSchema}
-          >
-            {(formikprops) => (
+            validationSchema={validationSchema}>
+            {formikprops => (
               <View style={{ marginTop: 5 }}>
                 <Box mt={0} p={2} ph={2}>
                   <Text
-                    style={[styles.label, { marginBottom: 5, marginLeft: 5 }]}
-                  >
+                    style={[styles.label, { marginBottom: 5, marginLeft: 5 }]}>
                     Task Heading
                   </Text>
                   <CustomTextInput
@@ -201,11 +132,9 @@ const AddTaskPre = () => {
                     textColor={"#012547"}
                   />
                 </Box>
-
                 <Box mt={10} p={2} ph={2}>
                   <Text
-                    style={[styles.label, { marginBottom: 5, marginLeft: 5 }]}
-                  >
+                    style={[styles.label, { marginBottom: 5, marginLeft: 5 }]}>
                     Location
                   </Text>
                   <CustomTextInput
@@ -220,11 +149,9 @@ const AddTaskPre = () => {
                     textColor={"#012547"}
                   />
                 </Box>
-
                 <Box mt={10} p={2} ph={2}>
                   <Text
-                    style={[styles.label, { marginBottom: 5, marginLeft: 5 }]}
-                  >
+                    style={[styles.label, { marginBottom: 5, marginLeft: 5 }]}>
                     Description
                   </Text>
                   <CustomTextInput
@@ -239,11 +166,9 @@ const AddTaskPre = () => {
                     textColor={"#012547"}
                   />
                 </Box>
-
                 <Box mt={10} p={2} ph={2}>
                   <Text
-                    style={[styles.label, { marginBottom: 5, marginLeft: 5 }]}
-                  >
+                    style={[styles.label, { marginBottom: 5, marginLeft: 5 }]}>
                     Priority
                   </Text>
                   <PriorityDropDown
@@ -253,26 +178,20 @@ const AddTaskPre = () => {
                   {formikprops.touched["priority"] &&
                     formikprops.errors["priority"] && (
                       <Box ph={10} mt={2}>
-                        <Text
-                          style={{
-                            color: "red",
-                          }}
-                        >
-                          {formikprops.touched["priority"] &&
-                            formikprops.errors["priority"]}
+                        <Text style={{ color: "red" }}>
+                          {formikprops.errors["priority"]}
                         </Text>
                       </Box>
                     )}
                 </Box>
                 <Box mt={10} p={2} ph={2}>
                   <Text
-                    style={[styles.label, { marginBottom: 5, marginLeft: 5 }]}
-                  >
+                    style={[styles.label, { marginBottom: 5, marginLeft: 5 }]}>
                     Assign To
                   </Text>
                   <EmployeDropDown
                     picker={formikprops.values["assignTo"]}
-                    setPicker={(newValue: string) => {
+                    setPicker={newValue => {
                       const assignToArray = formikprops.values["assignTo"];
                       if (!assignToArray.includes(newValue)) {
                         const updatedAssignTo = [...assignToArray, newValue];
@@ -284,86 +203,73 @@ const AddTaskPre = () => {
                   {formikprops.touched["assignTo"] &&
                     formikprops.errors["assignTo"] && (
                       <Box ph={10} mt={2}>
-                        <Text
-                          style={{
-                            color: "red",
-                          }}
-                        >
-                          {formikprops.touched["assignTo"] &&
-                            formikprops.errors["assignTo"]}
+                        <Text style={{ color: "red" }}>
+                          {formikprops.errors["assignTo"]}
                         </Text>
                       </Box>
                     )}
-
                   <View
                     style={{
                       marginTop: 16,
                       flexDirection: "row",
                       gap: 8,
                       flexWrap: "wrap",
-                    }}
-                  >
-                    {formikprops.values["assignTo"]?.flatMap((val) => {
+                    }}>
+                    {formikprops.values["assignTo"]?.flatMap(val => {
                       const filteredItems = items.filter(
-                        (item) => item.id === val
+                        item => item.id === val,
                       );
                       const handleDelete = () => {
                         const updatedAssignTo = formikprops.values[
                           "assignTo"
-                        ].filter((item) => item !== val);
+                        ].filter(item => item !== val);
                         formikprops.setFieldValue("assignTo", updatedAssignTo);
                       };
 
-                      return filteredItems.map((filteredItem: any, index) => {
-                        return (
-                          <View
-                            key={`${val}-${index}`}
+                      return filteredItems.map((filteredItem, index) => (
+                        <View
+                          key={`${val}-${index}`}
+                          style={{
+                            backgroundColor: "#f6f6f6",
+                            padding: 12,
+                            marginVertical: 8,
+                            borderRadius: 8,
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 10,
+                          }}>
+                          <Image
+                            source={{ uri: filteredItem.employeImg }}
                             style={{
-                              backgroundColor: "#f6f6f6",
-                              padding: 12,
-                              marginVertical: 8,
-                              borderRadius: 8,
-                              flexDirection: "row",
-                              alignItems: "center",
-                              gap: 10,
+                              width: 20,
+                              height: 20,
+                              borderRadius: 25,
+                              marginRight: 12,
                             }}
-                          >
-                            <Image
-                              source={{ uri: filteredItem.employeImg }}
-                              style={{
-                                width: 20,
-                                height: 20,
-                                borderRadius: 25,
-                                marginRight: 12,
-                              }}
-                            />
-                            <Text
-                              style={{
-                                color: "#012547",
-                                fontSize: 14,
-                                textTransform: "capitalize",
-                                fontWeight: "500",
-                              }}
-                            >
-                              {filteredItem?.label}
-                            </Text>
-                            <TouchableOpacity onPress={handleDelete}>
-                              <Image source={TrashIcon} />
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      });
+                          />
+                          <Text
+                            style={{
+                              color: "#012547",
+                              fontSize: 14,
+                              textTransform: "capitalize",
+                              fontWeight: "500",
+                            }}>
+                            {filteredItem?.label}
+                          </Text>
+                          <TouchableOpacity onPress={handleDelete}>
+                            <Image source={TrashIcon} />
+                          </TouchableOpacity>
+                        </View>
+                      ));
                     })}
                   </View>
-
                   <View
                     style={{
                       marginTop: 10,
                       flexWrap: "wrap",
                       flexDirection: "row",
                       justifyContent: "flex-start",
-                    }}
-                  >
+                    }}>
                     {employes.map((item, index) => (
                       <SelectedChip
                         key={index}
@@ -373,8 +279,6 @@ const AddTaskPre = () => {
                     ))}
                   </View>
                 </Box>
-
-                {/*//*/}
                 <Box mt={10} pv={10}>
                   <Switcher
                     formiKey={"weeklySch"}
@@ -396,11 +300,9 @@ const AddTaskPre = () => {
                     description={"Scheduled task that will last all day"}
                   />
                 </Box>
-
                 <Box mt={10}>
                   <Divider />
                 </Box>
-
                 <Box mt={10} pv={10}>
                   <Switcher
                     formiKey={"allDay"}
@@ -411,11 +313,9 @@ const AddTaskPre = () => {
                     description={"Scheduled task that will last all day"}
                   />
                 </Box>
-
                 <Box mt={5}>
                   <Divider />
                 </Box>
-
                 <Box mt={10} pv={10}>
                   <RemainderDrop
                     formiKey={"remainder"}
@@ -426,11 +326,9 @@ const AddTaskPre = () => {
                     description={"App will remind you before"}
                   />
                 </Box>
-
                 <Box mt={5}>
                   <Divider />
                 </Box>
-
                 <Box mt={10} pv={10}>
                   <RemainderDrop
                     formikProps={formikprops}
@@ -442,17 +340,16 @@ const AddTaskPre = () => {
                     isDate={true}
                   />
                 </Box>
-
                 <Box mt={5}>
                   <Divider />
                 </Box>
-
-                {/*//Task start and end dates*/}
                 <View style={[styles.card2, { backgroundColor: "#ECECEC" }]}>
                   <Box mt={10} p={2} ph={2}>
                     <Text
-                      style={[styles.label, { marginBottom: 5, marginLeft: 5 }]}
-                    >
+                      style={[
+                        styles.label,
+                        { marginBottom: 5, marginLeft: 5 },
+                      ]}>
                       Start Date
                     </Text>
                     <CustomDatePicker
@@ -464,8 +361,10 @@ const AddTaskPre = () => {
                   </Box>
                   <Box mt={10} p={2} ph={2}>
                     <Text
-                      style={[styles.label, { marginBottom: 5, marginLeft: 5 }]}
-                    >
+                      style={[
+                        styles.label,
+                        { marginBottom: 5, marginLeft: 5 },
+                      ]}>
                       Start Time
                     </Text>
                     <CustomDatePicker
@@ -478,8 +377,10 @@ const AddTaskPre = () => {
                   </Box>
                   <Box mt={10} p={2} ph={2}>
                     <Text
-                      style={[styles.label, { marginBottom: 5, marginLeft: 5 }]}
-                    >
+                      style={[
+                        styles.label,
+                        { marginBottom: 5, marginLeft: 5 },
+                      ]}>
                       Due Date
                     </Text>
                     <CustomDatePicker
@@ -492,8 +393,10 @@ const AddTaskPre = () => {
                   </Box>
                   <Box mt={10} p={2} ph={2}>
                     <Text
-                      style={[styles.label, { marginBottom: 5, marginLeft: 5 }]}
-                    >
+                      style={[
+                        styles.label,
+                        { marginBottom: 5, marginLeft: 5 },
+                      ]}>
                       Due Time
                     </Text>
                     <CustomDatePicker
@@ -506,17 +409,14 @@ const AddTaskPre = () => {
                     />
                   </Box>
                 </View>
-
-                {/*//Task Attachements*/}
                 <View style={[styles.card2, { backgroundColor: "#ECECEC" }]}>
                   <UploadAttachments
                     uploadedPics={uploadedPics}
                     setUploadPics={setUploadPics}
                   />
                 </View>
-
                 <Box mt={20} mb={50}>
-                  {formikprops.isSubmitting ? (
+                  {isLoading ? (
                     <TouchableOpacity
                       activeOpacity={1}
                       style={[
@@ -526,8 +426,7 @@ const AddTaskPre = () => {
                           borderWidth: 1,
                           backgroundColor: "#012547",
                         },
-                      ]}
-                    >
+                      ]}>
                       <UIActivityIndicator color={"white"} size={20} />
                     </TouchableOpacity>
                   ) : (
@@ -541,8 +440,7 @@ const AddTaskPre = () => {
                           borderWidth: 1,
                           backgroundColor: "#012547",
                         },
-                      ]}
-                    >
+                      ]}>
                       <Text style={[styles.buttonTitle, { color: "white" }]}>
                         Add to App
                       </Text>
@@ -562,7 +460,6 @@ const styles = StyleSheet.create({
   card: {
     margin: 5,
     marginTop: normalize(10),
-    // backgroundColor:'red',
     shadowColor: "white",
     borderRadius: 10,
     shadowOpacity: 0.5,
@@ -574,7 +471,6 @@ const styles = StyleSheet.create({
   },
   card2: {
     marginTop: normalize(10),
-    // opacity: 0.5,
     backgroundColor: "white",
     shadowColor: "white",
     borderRadius: 10,
@@ -609,4 +505,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.15,
   },
 });
+
 export default AddTaskPre;

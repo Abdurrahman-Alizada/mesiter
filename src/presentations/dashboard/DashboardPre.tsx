@@ -5,9 +5,12 @@ import TaskTabs from "../../components/dashboard/TaskTabs";
 import TaskCalender from "../../components/dashboard/TaskCalender";
 import { useSelector } from "react-redux";
 import normalize from "../../utils/normalize";
+import { useGetAllTasksQuery } from "../../redux/reducers/task/taskThunk";
 const DashboardPre = () => {
-//@ts-ignore
+  //@ts-ignore
   const user = useSelector(state => state?.user?.currentLoginUser);
+  //@ts-ignore
+  const { data, error, isLoading, isFetching, refetch } = useGetAllTasksQuery();
   return (
     <View style={{ backgroundColor: "#F6F6F6", flex: 1 }}>
       <Box ph={10} mt={10}>
@@ -43,10 +46,10 @@ const DashboardPre = () => {
           paddingBottom: 50,
           marginBottom: 45,
         }}>
-        <TaskCalender />
+        <TaskCalender tasks={data?.tasks || []} />
 
         <View style={[styles.card, { marginTop: 10 }]}>
-          <TaskTabs />
+          <TaskTabs tasks={data?.tasks || []} />
         </View>
       </ScrollView>
     </View>

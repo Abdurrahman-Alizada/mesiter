@@ -53,7 +53,6 @@ const CustomDatePicker: React.FC<Types> = ({ formikProps, formiKey,date=new Date
   // }
 
 
-    console.log(date)
   return (
     <>
       {/*//@ts-ignore*/}

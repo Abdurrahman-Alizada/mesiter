@@ -1,18 +1,14 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Dimensions,
-  FlatList,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
+  TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import normalize from "../../utils/normalize";
-import {
-  getMonthNameFromDate,
-  getTotalDaysofMonth,
-} from "../../utils/dateHelpers";
+import { getTotalDaysofMonth } from "../../utils/dateHelpers";
 
 const GridCalendar = ({ date, tasks }) => {
   const navigation = useNavigation();
@@ -37,8 +33,8 @@ const GridCalendar = ({ date, tasks }) => {
   const rearrangeDaysOfWeek = useCallback((dayIndex) => {
     if (dayIndex >= 0 && dayIndex < 7) {
       const rearrangedDays = [
-        ...daysOfWeek.slice(dayIndex - 1),
-        ...daysOfWeek.slice(0, dayIndex - 1),
+        ...daysOfWeek.slice(dayIndex),
+        ...daysOfWeek.slice(0, dayIndex),
       ];
       setDaysOfWeek(rearrangedDays);
     }
@@ -47,23 +43,21 @@ const GridCalendar = ({ date, tasks }) => {
   const dayHasTask = useCallback((day) => {
     return tasks
       .filter((task) => {
-        const taskDate = new Date(
-          task.startDate.seconds * 1000 + Math.floor(task.startDate.nanoseconds / 1e6)
-        );
-        return taskDate.getDate() === day;
+        const taskStartDate = new Date(task.startDate);
+        const taskEndDate = new Date(task.endDate);
+        return taskStartDate.getDate() <= day && day <= taskEndDate.getDate();
       })
       .map((task) => ({
         taskHeading: task.taskHeading,
-        taskId: task.docId,
+        taskId: task._id, // Corrected to use `_id` from the response
       }));
   }, [tasks]);
 
   const TaskHeader = ({ title, taskId }) => (
     <TouchableOpacity
-    onPress={() => navigation.navigate("HomeStack", { screen: "TaskDetails", params: { taskId: taskId } })}
-    // onPress={() => navigation.navigate("TaskDetails", { taskId })}
+      onPress={() => navigation.navigate("HomeStack", { screen: "TaskDetails", params: { taskId: taskId } })}
       style={styles.taskHeader}>
-      <Text style={styles.taskTitle}>{title}</Text>
+      <Text style={styles.taskTitle} numberOfLines={2}>{title}</Text>
     </TouchableOpacity>
   );
 
@@ -78,7 +72,7 @@ const GridCalendar = ({ date, tasks }) => {
       return (
         <View style={styles.dayColumn} key={index}>
           <Text style={styles.dayText}>{day}</Text>
-          {tasksForDay.map((task,index) => (
+          {tasksForDay.map((task, index) => (
             <TaskHeader key={index} title={task.taskHeading} taskId={task.taskId} />
           ))}
         </View>

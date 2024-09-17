@@ -22,7 +22,6 @@ const AddMemberContainer = () => {
       status: "active",
       phoneNumber: values.phone,
     };
-    console.log("first",user)
     addUserByAdmin(user)
       .then(res => {
         if (res.data?.success) {
@@ -32,7 +31,6 @@ const AddMemberContainer = () => {
           setVisible(true)
           setErrorMessage(res?.error?.data?.message)
         }
-        console.log("response is", res);
       })
       .finally(() => actions.setSubmitting(false));
   };

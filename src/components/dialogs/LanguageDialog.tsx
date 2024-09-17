@@ -26,7 +26,6 @@ const LanguageDialog: React.FC<Types> = ({ visible = false, setVisible }) => {
   const { t } = useTranslation();
 
   const changeLanguage = async (value: string) => {
-    console.log("first",value)
     i18next.changeLanguage(value);
     setVisible(false);
     await AsyncStorage.setItem("AppLanguage", value);

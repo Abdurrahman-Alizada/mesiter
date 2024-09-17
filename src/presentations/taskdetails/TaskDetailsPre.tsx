@@ -53,8 +53,8 @@ const TaskDetailsPre = () => {
 
   const icons = {
     Low: lowPriority,
+    Meduim: MediumPriority,
     High: HighPriority,
-    "Very Important": MediumPriority,
   };
 
   useFocusEffect(
@@ -190,7 +190,6 @@ const TaskDetailsPre = () => {
                   horizontal={true}
                   data={taskData?.attachments}
                   renderItem={(item, index) => {
-                    console.log("item", item?.item);
                     return (
                       <TouchableOpacity
                         key={index}
