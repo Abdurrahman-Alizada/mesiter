@@ -79,7 +79,6 @@ const RoleDropDown: React.FunctionComponent<PropsTypes> = ({
         />
       ),
     }));
-    console.log(data);
     setItems(data);
   }, []);
 

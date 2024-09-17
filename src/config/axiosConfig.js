@@ -17,7 +17,6 @@ axiosInstance.interceptors.request.use(
 
       config.headers.Authorization = `token ${token}`;
 
-      console.log(config)
       return config;
     } catch (error) {
       // Handle token retrieval error

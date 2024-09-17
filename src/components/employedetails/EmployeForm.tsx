@@ -14,7 +14,6 @@ const EmployeForm = () => {
   })
   const handleSubmit = (values, actions) => {
     //submit form here
-    console.log("see you on ")
 
   };
 

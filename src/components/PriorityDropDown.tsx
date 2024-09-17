@@ -23,8 +23,8 @@ import bluecircle from "../assets/icons/bluecircle.png";
 import normalize from "../utils/normalize";
 const icons = {
   Low: lowPriority,
+  Medium: MediumPriority,
   High: HighPriority,
-  "Very Important": MediumPriority,
 };
 const PriorityDropDown: React.FunctionComponent<PropsTypes> = ({
   picker,
@@ -70,8 +70,8 @@ const PriorityDropDown: React.FunctionComponent<PropsTypes> = ({
       ),
     },
     {
-      label: "Very Important",
-      value: "Very Important",
+      label: "Medium",
+      value: "Medium",
       icon: () => (
         <Image
           source={MediumPriority}

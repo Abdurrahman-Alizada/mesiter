@@ -83,7 +83,6 @@ const UserForm: React.FC<Types> = ({ data }) => {
     };
     updateUser(updatedUser)
       .then((res: any) => {
-        console.log("res is", res);
 
         showMessage({
           message: "User Updated Successfully",
@@ -116,8 +115,6 @@ const UserForm: React.FC<Types> = ({ data }) => {
   const handleDeleteUser = () => {
     deleteUserByAdmin(data?._id)
       .then((res: any) => {
-        console.log("res is", res);
-
         showMessage({
           message: "User Deleted Successfully",
           type: "success",

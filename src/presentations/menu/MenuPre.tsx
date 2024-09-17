@@ -33,7 +33,6 @@ const MenuPre = () => {
     const [languageVisible, setLanguageVisible] = useState(false);
 
     let user = useSelector(state => state?.user?.currentLoginUser);
-    console.log("user",user)
 
     return (
         <>

@@ -94,7 +94,6 @@ const RemainderDrop: React.FC<Types> = ({
         open={open}
         date={formikProps.values[formiKey]}
         onConfirm={(date) => {
-          console.log("hamd", date);
           setOpen(false);
           formikProps.setFieldValue(formiKey, date);
         }}

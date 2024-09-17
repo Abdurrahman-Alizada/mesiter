@@ -6,8 +6,6 @@ const AssignTo = ({ userId }) => {
   const [userData, setUserData] = useState();
   const [userImage, setUserImage] = useState();
 
-  console.log("userData", userData, userImage);
-
   const fetchUserData = async () => {
    
   };
