@@ -27,6 +27,15 @@
     "Holidays": "Holidays",
     "Notifications": "Notifications",
     "Language": "Language",
-    "Log out": "Log out"
+    "Log out": "Log out",
+    "choose": "Choose",
+    "camera": "Camera",
+    "gallery": "Gallery",
+    "cancel": "Cancel",
+    "userNamePlaceholder": "User name",
+    "adminRole": "Admin",
+    "employeeRole": "Employee",
+    "moreInfo": "More Info",
+    "no-results-found":"No results found"
   }
 }

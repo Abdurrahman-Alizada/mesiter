@@ -4,23 +4,21 @@ import {
     TouchableOpacity,
     View,
     StyleSheet,
-    Platform, Modal, Image
+    Platform, Modal
 } from "react-native";
 import * as M2DColor from "react-native-paper/src/styles/themes/v2/colors";
 
 //@ts-ignore
 import {Box,Flex, Text} from "@react-native-material/core";
-import {sanFranciscoWeights} from "react-native-typography";
-import { CommonActions } from "@react-navigation/native";
 import {Languages} from "../../services/languageList";
 
 
 import i18next from "i18next";
-// import * as SecureStore from 'expo-secure-store';
-// import {StoreKeys} from "@config/constants";
 import {useTranslation} from "react-i18next";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import normalize from '../../utils/normalize';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StoreKeys } from '../../config/constants';
 
 interface  Types{
     visible:    boolean;
@@ -38,14 +36,14 @@ const UploadSelection :React.FC<Types>= ({handlerFile=()=>{},handlerCamera=()=>{
         i18next.changeLanguage(isGerman ? Languages?.sg: Languages?.en)
         setVisible(false)
 
-        await SecureStore.setItemAsync(StoreKeys.AppLanguage, isGerman ? Languages?.sg: Languages?.en);
+        await AsyncStorage.setItem(StoreKeys.AppLanguage, isGerman ? Languages?.sg: Languages?.en);
     }
 
 
 
     useEffect(() => {
         (async function() {
-            const appLanguage = await SecureStore.getItemAsync(StoreKeys.AppLanguage);
+            const appLanguage = await AsyncStorage.getItem(StoreKeys.AppLanguage);
             setIsGerman(appLanguage === Languages.sg ? true :false)
         })()
 

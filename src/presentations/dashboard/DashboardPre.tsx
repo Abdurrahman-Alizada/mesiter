@@ -1,15 +1,13 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Box } from "@react-native-material/core";
-
 import TaskTabs from "../../components/dashboard/TaskTabs";
 import TaskCalender from "../../components/dashboard/TaskCalender";
-import Swipeable from "react-native-gesture-handler/Swipeable";
 import { useSelector } from "react-redux";
 import normalize from "../../utils/normalize";
 const DashboardPre = () => {
-  const user = useSelector((state) => state?.user);
-
+//@ts-ignore
+  const user = useSelector(state => state?.user?.currentLoginUser);
   return (
     <View style={{ backgroundColor: "#F6F6F6", flex: 1 }}>
       <Box ph={10} mt={10}>
@@ -21,22 +19,20 @@ const DashboardPre = () => {
             letterSpacing: 1,
             fontWeight: "600",
             fontSize: normalize(15),
-          }}
-        >
+          }}>
           Welcome Back!
         </Text>
         <Text
           style={{
-            color: "#1F0900",
+            color: "#40302A",
             fontFamily: "Poppins-regular",
             lineHeight: 20,
             letterSpacing: 0.25,
             fontWeight: "400",
-            fontSize: normalize(13),
+            fontSize: normalize(12),
             textTransform: "capitalize",
-          }}
-        >
-          {user?.user?.name}
+          }}>
+          {user?.fullName}
         </Text>
       </Box>
 
@@ -46,8 +42,7 @@ const DashboardPre = () => {
           paddingHorizontal: 10,
           paddingBottom: 50,
           marginBottom: 45,
-        }}
-      >
+        }}>
         <TaskCalender />
 
         <View style={[styles.card, { marginTop: 10 }]}>

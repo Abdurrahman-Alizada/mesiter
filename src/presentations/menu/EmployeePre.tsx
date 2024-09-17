@@ -1,59 +1,48 @@
-import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import normalize from "../../utils/normalize";
-import { useFocusEffect, useTheme } from "@react-navigation/native";
+import { useTheme } from "@react-navigation/native";
 import { Flex, Box } from "@react-native-material/core";
 import { Searchbar } from "react-native-paper";
 import ProfileCard from "../../components/profilecard/ProfileCard";
-import { FlashList } from "@shopify/flash-list";
 import { useTranslation } from "react-i18next";
 import EmployeeCardShimmer from "../../components/shimmers/EmployeeCardShimmer";
-import { showMessage } from "react-native-flash-message";
+import { useGetAllUsersQuery } from "../../redux/reducers/user/userThunk";
 
 const EmployeePre = () => {
   const { colors } = useTheme();
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [isLoaded, setLoaded] = useState(true);
-
   const { t } = useTranslation();
 
-  const [useData, setData] = useState([]);
-  const filteredData = useData.filter((item) =>
-    item?.name?.toLowerCase().startsWith(searchQuery.toLowerCase())
-  );
-  const [refresh, seRefresh] = useState(true);
+  // State for search query and filtered data
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      try {
-        firestore()
-          .collection(CollectionConstant.users)
-          .get()
-          .then((querySnapshot) => {
-            const temp = [];
+  // Fetch users data from API
+  const { data, isError, error, isLoading, isFetching, refetch } =
+    useGetAllUsersQuery();
 
-            querySnapshot.forEach((documentSnapshot) => {
-              temp.push({
-                ...documentSnapshot.data(),
-                docId: documentSnapshot.id,
-              });
-            });
-            // console.log(temp)
-            setData(temp);
-            setLoaded(false);
-          });
-      } catch (e) {
-        setData([]);
-        setLoaded(false);
-      }
-    }, [refresh])
-  );
+  // Update filtered data based on search query
+  useEffect(() => {
+    if (data?.users) {
+      const search = searchQuery.toLowerCase();
 
-  const deleteUser = (data) => {
-   
+      // Filter users by name, phone, or email
+      const filtered = data.users.filter(
+        user =>
+          user.fullName?.toLowerCase().includes(search) ||
+          user.phoneNumber?.toString().includes(search) ||
+          user.email?.toLowerCase().includes(search),
+      );
+
+      setFilteredData(filtered);
+    }
+  }, [searchQuery, data]);
+
+  // Handle search input changes
+  const onChangeSearch = query => {
+    setSearchQuery(query);
   };
 
-  const onChangeSearch = (query: any) => setSearchQuery(query);
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <Flex direction={"row"} ph={20} mt={20}>
@@ -66,8 +55,7 @@ const EmployeePre = () => {
               fontWeight: "400",
               opacity: 0.85,
             },
-          ]}
-        >
+          ]}>
           {t("total-staff")}
         </Text>
         <Text
@@ -79,16 +67,15 @@ const EmployeePre = () => {
               marginLeft: 4,
               fontWeight: "600",
             },
-          ]}
-        >
-          {useData.length}
+          ]}>
+          {filteredData?.length}
         </Text>
       </Flex>
-      <Box mt={15} ph={20}>
+
+      <Box mt={15} mb={15} ph={20}>
         <Searchbar
-          // placeholder={t("Search person, phone & email"}
           placeholder={`${t("search")}, ${t("person")}, ${t("phone")},${t(
-            "email"
+            "email",
           )} `}
           onChangeText={onChangeSearch}
           value={searchQuery}
@@ -106,18 +93,30 @@ const EmployeePre = () => {
 
       <View>
         <Box ph={10}>
-          {isLoaded ? (
-            <EmployeeCardShimmer isLoaded={isLoaded}></EmployeeCardShimmer>
+          {isLoading ? (
+            <EmployeeCardShimmer isLoaded={isLoading}></EmployeeCardShimmer>
           ) : (
             <FlatList
               contentContainerStyle={{ paddingBottom: 150 }}
               data={filteredData}
               renderItem={({ item }) => (
-                <ProfileCard
-                  deleteHandler={deleteUser}
-                  profileData={item}
-                  isExtraInfo={true}
-                />
+                <ProfileCard profileData={item} isExtraInfo={true} />
+              )}
+              keyExtractor={item => item._id.toString()}
+              refreshControl={
+                <RefreshControl refreshing={isFetching} onRefresh={refetch} />
+              }
+              ListEmptyComponent={() => (
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: 50,
+                  }}>
+                  <Text style={{ fontSize: 16, color: "gray" }}>
+                    {t("no-results-found")}
+                  </Text>
+                </View>
               )}
             />
           )}

@@ -7,10 +7,8 @@ import logo from '../../assets/logo.jpeg';
 
 const SplashScreen = ({ navigation }) => {
   const isAppFirstLaunched = useRef(true);
-  const userRole = useRef(null);
   const dispatch = useDispatch()
  
-
   useEffect(() => {
     const firstLaunch = async () => {
       const appData = await AsyncStorage.getItem('isAppFirstLaunched1');
@@ -25,27 +23,20 @@ const SplashScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    const userRoleHandler = async () => {
-      const role = await AsyncStorage.getItem('role');
-      userRole.current = role;
-    };
-    userRoleHandler();
-  }, []);
-
-  useEffect(() => {
     const checkLoginStatus = async () => {
       try {
         const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
         let screenTo = "Onboarding";
 
-        if (isAppFirstLaunched.current) {
-          screenTo = { name: "Onboarding" };
-        } else if (!isLoggedIn) {
+        // if (isAppFirstLaunched.current) {
+        //   screenTo = { name: "Onboarding" };
+        // } else 
+        if (!isLoggedIn) {
           screenTo = { name: "WelcomeScreen" };
         }
-        //  else if (isLoggedIn && userRole.current === "freeflexer") {
-        //   screenTo = { name: "Main", params: { screen: "FreeflexerStack", params: { screen: "FreeflexerHomeScreen" } } };
-        // }
+         else if (isLoggedIn ) {
+          screenTo = { name: "TabNavigation"};
+        }
 
         navigation.replace(screenTo.name, screenTo.params);
       } catch (err) {
@@ -65,7 +56,8 @@ const SplashScreen = ({ navigation }) => {
       const token = await AsyncStorage.getItem('token');
       const userId = await AsyncStorage.getItem('userId');
       const role = await AsyncStorage.getItem('role');
-      dispatch(handleCurrentLoaginUser({ email: email, token: token, id: userId, role: role }))
+      const fullName = await AsyncStorage.getItem('fullName');
+      dispatch(handleCurrentLoaginUser({ email: email, token: token, id: userId, role: role,fullName:fullName }))
     }
     getUserInfo()
   })

@@ -1,16 +1,16 @@
-export const UserRoles=[
-{
-    id:'1',
-    title:'Admin'
-},
+export const UserRoles = [
     {
-        id:'2',
-        title:'Employee'
+        id: '1',
+        title: 'admin'
+    },
+    {
+        id: '2',
+        title: 'employee'
     },
 
 ]
 
-export const  StoreKeys={
-    AppLanguage:'appLanguage',
-    UserData:'userdata',
+export const StoreKeys = {
+    AppLanguage: 'appLanguage',
+    UserData: 'userdata',
 }
