@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, Platform } from "react-native";
 // @ts-ignore
 import AntDesign from "react-native-vector-icons/AntDesign";
 
@@ -17,9 +17,6 @@ interface PropsTypes {
   style?: undefined;
 }
 
-import HighPriority from "../assets/icons/HighPriority.png";
-import lowPriority from "../assets/icons/lowPriority.png";
-import MediumPriority from "../assets/icons/MediumPriority.png";
 import bluecircle from "../assets/icons/bluecircle.png";
 import { UserRoles } from "../config/constants";
 import normalize from "../utils/normalize";
@@ -70,7 +67,7 @@ const RoleDropDown: React.FunctionComponent<PropsTypes> = ({
   useEffect(() => {
     const data = UserRoles.map(item => ({
       label: item.title,
-      value: item.id,
+      value: item.title,
       icon: () => (
         <View
           style={{

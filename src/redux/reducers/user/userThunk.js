@@ -14,7 +14,7 @@ export const userApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['User', 'CurrentLoginUser'],
+  tagTypes: ['Users', 'CurrentLoginUser'],
   reducerPath: 'userApi',
   endpoints: build => ({
     addUserByAdmin: build.mutation({
@@ -23,16 +23,15 @@ export const userApi = createApi({
         method: 'POST',
         body: {
           email: user.email,
-          addressLine1: user.addressLine1,
-          addressLine2: user.addressLine2,
-          addressLine3: user.addressLine3,
-          postCode: user.postCode,
-          city: user.city,
-          firstName: user.firstName,
-          surName: user.surName,
+          password: user.password,
+          fullName: user.fullName,
+          address: user.address,
+          role: user.role,
+          status: user.role,
+          phoneNumber: user.phoneNumber,
         },
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ['Users','CurrentLoginUser'],
     }),
 
     loginUser: build.mutation({
@@ -44,7 +43,7 @@ export const userApi = createApi({
           password: user.password,
         },
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ['Users','CurrentLoginUser'],
     }),
 
     getCurrentLoginUser: build.query({
@@ -54,28 +53,28 @@ export const userApi = createApi({
 
     getAllUsers: build.query({
       query: () => `/user/getAll`,
-      providesTags: ['CurrentLoginUser'],
+      providesTags: ['Users','CurrentLoginUser'],
     }),
   
     updateUser: build.mutation({
       query: user => ({
-        url: `/user/freeflexer/updateFreeflexer/${user.id}`,
+        url: `/user/update/${user.id}`,
         method: 'PUT',
         body: user
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ['Users','CurrentLoginUser'],
     }),
    
     // delete user by itself
-    deleteUserByItself: build.mutation({
+    deleteUserByAdmin: build.mutation({
       query: id => ({
-        url: `/api/account/users/${id}/deleleUserByItSelf`,
+        url: `/user/delete/${id}`,
         method: 'DELETE',
         body: {
           reson: 'Reason will be here',
         },
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ['Users','CurrentLoginUser'],
     }),
    
   }),
@@ -86,6 +85,6 @@ export const {
   useGetCurrentLoginUserQuery,
   useGetAllUsersQuery,
   useAddUserByAdminMutation,
-  useDeleteUserByItselfMutation,
+  useDeleteUserByAdminMutation,
   useUpdateUserMutation,
 } = userApi;

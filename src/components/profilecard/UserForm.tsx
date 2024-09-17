@@ -8,25 +8,31 @@ import SingleInput from "../../components/profilecard/SingleInput";
 import trash from "../../assets/icons/trash.png";
 import { useTranslation } from "react-i18next";
 import RoleDropDown from "../../../components/RoleDropDown";
-import {UserRoles} from "../../config/constants";
+import { UserRoles } from "../../config/constants";
 import RoleInput from "../../components/profilecard/RoleInput";
 import { showMessage } from "react-native-flash-message";
 // import {DebugConsole} from "@utils/debuggingHelpers";
 import { UIActivityIndicator } from "react-native-indicators";
+import {
+  useDeleteUserByAdminMutation,
+  useUpdateUserMutation,
+} from "../../redux/reducers/user/userThunk";
 
 interface Types {
   data?: [];
-  deleteHandler?: Function;
 }
 
-const UserForm: React.FC<Types> = ({ data, deleteHandler = () => {} }) => {
+const UserForm: React.FC<Types> = ({ data }) => {
   const { t } = useTranslation();
   const [deleteLoader, setDeleteLoader] = useState(false);
 
   const validationSchema = yup.object().shape({
     name: yup.string().label("name").required("Name of Person is required"),
     role: yup.string().label("role").required("Role is required"),
-    phone: yup.number().label("phone").required("Phone Number is required"),
+    phoneNumber: yup
+      .number()
+      .label("phoneNumber")
+      .required("Phone Number is required"),
     email: yup
       .string()
       .label("email")
@@ -55,17 +61,30 @@ const UserForm: React.FC<Types> = ({ data, deleteHandler = () => {} }) => {
       ),
   });
 
-  const updateUserProfile = (values: any) => {
-    return new Promise((resolve, reject) => {});
-  };
+  const [updateUser, { isLoading, isError, error }] = useUpdateUserMutation();
+  const [
+    deleteUserByAdmin,
+    { isLoading: deleteLoading, isError: deleteisError, error: deleteError },
+  ] = useDeleteUserByAdminMutation();
 
-  const handleSubmit = (values, actions) => {
-    console.log("see mer");
+  const handleSubmit = (values: any, actions: any) => {
     actions.setSubmitting(true);
     //submit form here
-    updateUserProfile(values)
+    const updatedUser = {
+      id: data?._id,
+      email: values.email,
+      password: values.appLoginPassword,
+      appLoginPassword: values.appLoginPassword,
+      fullName: values.name,
+      address: "",
+      role: values.role,
+      status: "active",
+      phoneNumber: values.phoneNumber,
+    };
+    updateUser(updatedUser)
       .then((res: any) => {
-        console.log("Promise resolve", res);
+        console.log("res is", res);
+
         showMessage({
           message: "User Updated Successfully",
           type: "success",
@@ -92,25 +111,48 @@ const UserForm: React.FC<Types> = ({ data, deleteHandler = () => {} }) => {
         }
       })
       .finally(() => actions.setSubmitting(false));
-    console.log("value", values);
   };
 
-  useEffect(() => {
-    console.log(
-      "see",
-      UserRoles.filter(item => item.id === data?.role).map(v => v.id)?.[0],
-    );
-  }, []);
+  const handleDeleteUser = () => {
+    deleteUserByAdmin(data?._id)
+      .then((res: any) => {
+        console.log("res is", res);
+
+        showMessage({
+          message: "User Deleted Successfully",
+          type: "success",
+          animated: true,
+          animationDuration: 200,
+          statusBarHeight: -10,
+          icon: "success",
+          duration: 6000,
+        });
+        // actions.resetForm(initValues);
+      })
+      .catch((err: any) => {
+        if (err != 404) {
+          showMessage({
+            message: "Something went wrong try again later",
+            type: "danger",
+            animated: true,
+            animationDuration: 200,
+            statusBarHeight: -10,
+            icon: "info",
+            duration: 6000,
+          });
+        }
+      });
+  };
 
   return (
     <Formik
       initialValues={{
-        name: data?.name,
-        role: UserRoles.filter(item => item.id === data?.role).map(
-          v => v.id,
+        name: data?.fullName,
+        role: UserRoles.filter(item => item.title === data?.role).map(
+          v => v.title,
         )?.[0],
         email: data?.email,
-        phone: data?.phone,
+        phoneNumber: data?.phoneNumber,
         appLoginPassword: data?.appLoginPassword,
       }}
       onSubmit={(values, actions) => handleSubmit(values, actions)}
@@ -149,8 +191,8 @@ const UserForm: React.FC<Types> = ({ data, deleteHandler = () => {} }) => {
           <Box mt={10}>
             <SingleInput
               formikProps={formikprops}
-              label={t("phone")}
-              formiKey={"phone"}
+              label={t("phoneNumber")}
+              formiKey={"phoneNumber"}
               placeholder={"-----"}
               isRightIcon={true}
               secureTextEntry={false}
@@ -176,11 +218,11 @@ const UserForm: React.FC<Types> = ({ data, deleteHandler = () => {} }) => {
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
-                onPress={!deleteLoader ? formikprops.handleSubmit : ""}
+                onPress={!deleteLoading ? formikprops.handleSubmit : ()=>console.log("delete ongoing")}
                 activeOpacity={1}
                 style={[styles.button, { backgroundColor: "#9F9793" }]}>
                 <Text style={[sanFranciscoWeights.bold, { color: "white" }]}>
-                  Update Setting
+                  Update user
                 </Text>
               </TouchableOpacity>
             )}
@@ -188,7 +230,7 @@ const UserForm: React.FC<Types> = ({ data, deleteHandler = () => {} }) => {
 
           <Box mt={10} ph={20}>
             {/*//@ts-ignore*/}
-            {deleteLoader ? (
+            {deleteLoading ? (
               <TouchableOpacity
                 onPress={() => console.log("sss")}
                 activeOpacity={1}
@@ -205,8 +247,7 @@ const UserForm: React.FC<Types> = ({ data, deleteHandler = () => {} }) => {
             ) : (
               <TouchableOpacity
                 onPress={() => {
-                  setDeleteLoader(true);
-                  deleteHandler(data);
+                  handleDeleteUser();
                 }}
                 activeOpacity={1}
                 style={[

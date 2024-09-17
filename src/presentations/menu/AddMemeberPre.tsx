@@ -22,7 +22,7 @@ interface Types {
 
 const initValues = {
   name: "",
-  role: UserRoles[0]?.id,
+  role: UserRoles[0]?.title,
   phone: "",
   email: "",
   appLoginPassword: "",
@@ -61,41 +61,6 @@ const AddMemeberPre: React.FC<Types> = ({ createNewUser }) => {
         }
       ),
   });
-  //@ts-ignore
-  const handleSubmit = (values, actions) => {
-    actions.setSubmitting(true);
-    //submit form here
-    createNewUser(values)
-      .then((res: any) => {
-        console.log("Promise resolve", res);
-        showMessage({
-          message: "Task Created Successfully",
-          type: "success",
-          animated: true,
-          animationDuration: 200,
-          statusBarHeight: -10,
-          icon: "success",
-          duration: 6000,
-        });
-        actions.resetForm(initValues);
-      })
-      .catch((err: any) => {
-        if (err != 404) {
-          showMessage({
-            message: "Something went wrong try again later",
-            type: "danger",
-            animated: true,
-            animationDuration: 200,
-            statusBarHeight: -10,
-            icon: "success",
-            duration: 6000,
-          });
-          DebugConsole("inside the Add Memebe Pre", err);
-        }
-      })
-      .finally(() => actions.setSubmitting(false));
-    console.log("value", values);
-  };
 
   return (
     <View>
@@ -122,7 +87,8 @@ const AddMemeberPre: React.FC<Types> = ({ createNewUser }) => {
         >
           <Formik
             initialValues={initValues}
-            onSubmit={(values, actions) => handleSubmit(values, actions)}
+            // onSubmit={(values, actions) => handleSubmit(values, actions)}
+            onSubmit={(values, actions) => createNewUser(values, actions)}
             validationSchema={validationSchema}
           >
             {(formikprops) => (

@@ -28,11 +28,9 @@ import normalize from "../../utils/normalize";
 interface Types {
   profileData: any;
   isExtraInfo?: boolean;
-  deleteHandler?: Function;
 }
 
 const ProfileCard: React.FC<Types> = ({
-  deleteHandler,
   profileData = {},
   isExtraInfo = false,
 }) => {
@@ -103,7 +101,6 @@ const ProfileCard: React.FC<Types> = ({
     const task = storage().ref(filename).putFile(img);
     // set progress state
     task.on("state_changed", snapshot => {
-      // console.log("inside profile card",Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000)
       setRefresh(v => !v);
     });
   };
@@ -148,7 +145,7 @@ const ProfileCard: React.FC<Types> = ({
                   visible={visible}
                   onDismiss={() => setVisible(false)}
                   style={{ backgroundColor: "white" }}>
-                  <Dialog.Title>Choose</Dialog.Title>
+                  <Dialog.Title>{t("choose")}</Dialog.Title>
                   <Dialog.Content
                     style={{
                       alignItems: "center",
@@ -167,7 +164,7 @@ const ProfileCard: React.FC<Types> = ({
                             style={{ height: 17, width: 17 }}
                           />
                           <Text style={{ color: "black", marginTop: 10 }}>
-                            Camera
+                            {t("camera")}
                           </Text>
                         </TouchableOpacity>
                       </View>
@@ -178,14 +175,16 @@ const ProfileCard: React.FC<Types> = ({
                             style={{ height: 17, width: 17 }}
                           />
                           <Text style={{ color: "black", marginTop: 10 }}>
-                            Gallery
+                            {t("gallery")}
                           </Text>
                         </TouchableOpacity>
                       </View>
                     </View>
                   </Dialog.Content>
                   <Dialog.Actions>
-                    <Button onPress={() => setVisible(false)}>Cancel</Button>
+                    <Button onPress={() => setVisible(false)}>
+                      {t("cancel")}
+                    </Button>
                   </Dialog.Actions>
                 </Dialog>
               </Portal>
@@ -207,12 +206,12 @@ const ProfileCard: React.FC<Types> = ({
           <Text style={styles.userName}>
             {profileData?.fullName
               ? profileData.fullName
-              : "User name"}
+              : t("userNamePlaceholder")}
           </Text>
           {profileData?.role === "admin" ? (
-            <Text style={styles.userRole}>Admin</Text>
+            <Text style={styles.userRole}>{t("adminRole")}</Text>
           ) : (
-            <Text style={styles.userRole}>Employee</Text>
+            <Text style={styles.userRole}>{t("employeeRole")}</Text>
           )}
         </View>
 
@@ -221,7 +220,7 @@ const ProfileCard: React.FC<Types> = ({
           <View>
             <Flex direction={"row"} mt={10} justify={"between"}>
               <Text style={[styles.moreDetailsTitle, { color: colors.text }]}>
-                {t("more-info")}
+                {t("moreInfo")}
               </Text>
               <TouchableOpacity
                 onPress={() => setToggleDetails(!toggleDetails)}>
@@ -237,7 +236,7 @@ const ProfileCard: React.FC<Types> = ({
             </Flex>
             {toggleDetails && (
               <Box mt={5}>
-                <UserForm deleteHandler={deleteHandler} data={profileData} />
+                <UserForm data={profileData} />
               </Box>
             )}
           </View>
@@ -251,7 +250,6 @@ const styles = StyleSheet.create({
   card: {
     margin: 10,
     marginTop: normalize(10),
-    // backgroundColor:'red',
     backgroundColor: "white",
     shadowColor: "white",
     borderRadius: 10,
@@ -294,18 +292,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: normalize(15),
     fontWeight: "600",
-    fontFamily: "Poppins-SemiBold",
-    lineHeight: 24,
-    letterSpacing: 1,
+    color: "black",
   },
   userRole: {
-    marginTop: 2,
     textAlign: "center",
-    fontSize: normalize(12),
+    fontSize: normalize(13),
     fontWeight: "400",
-    fontFamily: "Poppins-Regular",
-    lineHeight: 16,
-    letterSpacing: 0.4,
+    color: "gray",
   },
   moreDetailsTitle: {
     fontSize: normalize(13),

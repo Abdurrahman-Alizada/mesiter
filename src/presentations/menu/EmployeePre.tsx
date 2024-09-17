@@ -1,35 +1,48 @@
-import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import normalize from "../../utils/normalize";
-import { useFocusEffect, useTheme } from "@react-navigation/native";
+import { useTheme } from "@react-navigation/native";
 import { Flex, Box } from "@react-native-material/core";
 import { Searchbar } from "react-native-paper";
 import ProfileCard from "../../components/profilecard/ProfileCard";
-import { FlashList } from "@shopify/flash-list";
 import { useTranslation } from "react-i18next";
 import EmployeeCardShimmer from "../../components/shimmers/EmployeeCardShimmer";
-import { showMessage } from "react-native-flash-message";
 import { useGetAllUsersQuery } from "../../redux/reducers/user/userThunk";
 
 const EmployeePre = () => {
   const { colors } = useTheme();
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [isLoaded, setLoaded] = useState(true);
-
   const { t } = useTranslation();
+
+  // State for search query and filtered data
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+
+  // Fetch users data from API
   const { data, isError, error, isLoading, isFetching, refetch } =
     useGetAllUsersQuery();
 
-  const [useData, setData] = useState([]);
-  // const filteredData = data?.users?.filter(item =>
-  //   item?.name?.toLowerCase().startsWith(searchQuery.toLowerCase()),
-  // );
-  const filteredData = data?.users
-  console.log("first",filteredData,error)
+  // Update filtered data based on search query
+  useEffect(() => {
+    if (data?.users) {
+      const search = searchQuery.toLowerCase();
 
-  const deleteUser = data => {};
+      // Filter users by name, phone, or email
+      const filtered = data.users.filter(
+        user =>
+          user.fullName?.toLowerCase().includes(search) ||
+          user.phoneNumber?.toString().includes(search) ||
+          user.email?.toLowerCase().includes(search),
+      );
 
-  const onChangeSearch = (query: any) => setSearchQuery(query);
+      setFilteredData(filtered);
+    }
+  }, [searchQuery, data]);
+
+  // Handle search input changes
+  const onChangeSearch = query => {
+    setSearchQuery(query);
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <Flex direction={"row"} ph={20} mt={20}>
@@ -55,12 +68,12 @@ const EmployeePre = () => {
               fontWeight: "600",
             },
           ]}>
-          {data?.users?.length}
+          {filteredData?.length}
         </Text>
       </Flex>
-      <Box mt={15} ph={20}>
+
+      <Box mt={15} mb={15} ph={20}>
         <Searchbar
-          // placeholder={t("Search person, phone & email"}
           placeholder={`${t("search")}, ${t("person")}, ${t("phone")},${t(
             "email",
           )} `}
@@ -87,11 +100,23 @@ const EmployeePre = () => {
               contentContainerStyle={{ paddingBottom: 150 }}
               data={filteredData}
               renderItem={({ item }) => (
-                <ProfileCard
-                  deleteHandler={deleteUser}
-                  profileData={item}
-                  isExtraInfo={true}
-                />
+                <ProfileCard profileData={item} isExtraInfo={true} />
+              )}
+              keyExtractor={item => item._id.toString()}
+              refreshControl={
+                <RefreshControl refreshing={isFetching} onRefresh={refetch} />
+              }
+              ListEmptyComponent={() => (
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: 50,
+                  }}>
+                  <Text style={{ fontSize: 16, color: "gray" }}>
+                    {t("no-results-found")}
+                  </Text>
+                </View>
               )}
             />
           )}
