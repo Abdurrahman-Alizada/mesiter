@@ -1,2 +1,2 @@
 // export const baseURL = 'https://lanza-backend.onrender.com'
-export const baseURL = 'https://a43d-2402-ad80-fa-afd7-787b-c7fa-6618-d516.ngrok-free.app'
+export const baseURL = 'https://66a3-223-123-89-228.ngrok-free.app'

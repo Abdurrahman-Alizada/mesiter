@@ -16,6 +16,7 @@ const SelectedChip: React.FC<Types> = ({
   removeHandler = () => {},
   showTrash = true,
 }) => {
+  console.log("first",employeData)
   return (
     //@ts-ignore
     <View style={styles.chipContainer}>
@@ -45,7 +46,7 @@ const SelectedChip: React.FC<Types> = ({
         />
       )}
       {/*<Text style={styles.label}>{employeData.value}</Text>*/}
-      <Text style={styles.label}>{employeData.value}</Text>
+      <Text style={styles.label}>{employeData.fullName}</Text>
       {showTrash && (
         <TouchableOpacity
           activeOpacity={1}

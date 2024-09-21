@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 // @ts-ignore
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 import EmployeeData from "@components/addTask/dummyEmployes";
 interface PropsTypes {
@@ -38,21 +38,21 @@ const EmployeDropDown: React.FunctionComponent<PropsTypes> = ({
 }): React.ReactElement => {
   const [open, setOpen] = useState(false);
 
-  const Item = (props) => {
+  const Item = props => {
     const handleValue = ({ item }) => {
-      setPicker(item.value);
+      setPicker(item._id);
       setOpen(false);
     };
 
-    return props.item.label !== SelecteIdentifer ? (
+    return props.item._id !== SelecteIdentifer ? (
       <TouchableOpacity
         onPress={() => handleValue(props)}
+        key={props.item._id || Math.random().toString(36).substr(2, 9)} // Ensure a unique key
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
           marginTop: 10,
-        }}
-      >
+        }}>
         <View
           style={{
             height: 40,
@@ -61,10 +61,13 @@ const EmployeDropDown: React.FunctionComponent<PropsTypes> = ({
             alignItems: "center",
             paddingHorizontal: normalize(10),
             padding: 2,
-          }}
-        >
+          }}>
           <Image
-            source={{ uri: props.item.employeImg }}
+            source={
+              props.item.employeImg
+                ? { uri: props.item.employeImg }
+                : require("../../assets/placeholder.jpg")
+            }
             resizeMode={"contain"}
             style={{
               transform: [{ scale: 1.2 }],
@@ -74,15 +77,13 @@ const EmployeDropDown: React.FunctionComponent<PropsTypes> = ({
             }}
           />
           <View>
-            <Text style={styles.listLable}>{props.item.label}</Text>
+            <Text style={styles.listLable}>{props.item.fullName}</Text>
             <Text style={styles.roleLable}>{props.item.role}</Text>
           </View>
         </View>
         {props.isSelected === true && <props.TickIconComponent />}
       </TouchableOpacity>
-    ) : (
-      <></>
-    );
+    ) : null;
   };
 
   return (
@@ -96,7 +97,7 @@ const EmployeDropDown: React.FunctionComponent<PropsTypes> = ({
       closeAfterSelecting={true}
       disabled={isDisabled}
       value={
-        (picker && items?.find((item) => item.value === picker)?.value) ||
+        (picker && items?.find(item => item._id === picker)?._id) ||
         "Select Employees"
       }
       setOpen={setOpen}
@@ -104,10 +105,10 @@ const EmployeDropDown: React.FunctionComponent<PropsTypes> = ({
 
       placeholder={placeholder}
       zIndex={9999}
-      renderListItem={(props) => <Item {...props} />}
+      renderListItem={props => <Item key={props.item._id} {...props} />}
       TickIconComponent={({ style }) => (
         <Image
-          source={bluecircle}
+          source={require("../../assets/icons/bluecircle.png")}
           resizeMode={"contain"}
           style={{ marginRight: 10, height: 24, width: 24 }}
         />
