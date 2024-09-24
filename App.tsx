@@ -35,6 +35,7 @@ import AuthStack from "./src/navigation/AuthStack";
 // import BottomTabsStack from './src/navigation/BottomStack';
 import HomeStack from "./src/navigation/HomeStack";
 import FlashMessage from "react-native-flash-message";
+import MenuRoutes from "./src/navigation/MenuRoutes";
 
 export const App = () => {
   const [isThemeDark, setIsThemeDark] = React.useState(false);
@@ -139,6 +140,11 @@ export const App = () => {
                 <Stack.Screen
                   name="HomeStack"
                   component={HomeStack}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="MenuStack"
+                  component={MenuRoutes}
                   options={{ headerShown: false }}
                 />
                 <Stack.Screen
