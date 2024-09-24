@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import normalize from "../../utils/normalize";
 import { Box, Flex } from "@react-native-material/core";
@@ -38,6 +39,8 @@ import {
 } from "@react-navigation/native";
 import { formatDate, formatTime } from "../../utils/dateHelpers";
 import AssignTo from "../../components/taskdetails/AssignTo";
+import { useGetTaskByIdQuery } from "../../redux/reducers/task/taskThunk";
+import ShimmerTaskDetails from "../../components/shimmers/ShimmerTaskDetails";
 
 const ph = 10;
 const TaskDetailsPre = () => {
@@ -45,150 +48,149 @@ const TaskDetailsPre = () => {
   const [index, setIndex] = React.useState(0);
   const [routes, setRoutes] = React.useState(1);
   const navigation = useNavigation();
-  const route = useRoute();
-  const taskId = route.params?.taskId;
-  const [taskData, setTaskData] = useState({
-    attachments: [],
-  });
+  const route: any = useRoute();
+  const { data, error, isLoading, isFetching, refetch } = useGetTaskByIdQuery(
+    route.params?.taskId,
+    { skip: !route?.params?.taskId },
+  );
+  const [taskData, setTaskData] = useState({});
+
+  console.log("first", data);
+  useEffect(() => {
+    if (data?.task) {
+      setTaskData(data.task);
+    }
+  }, [data]);
 
   const icons = {
-    Low: lowPriority,
-    Meduim: MediumPriority,
-    High: HighPriority,
+    low: lowPriority,
+    medium: MediumPriority,
+    high: HighPriority,
   };
-
-  useFocusEffect(
-    React.useCallback(() => {
-  
-    }, [taskId])
-  );
 
   return (
     <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={isFetching} onRefresh={refetch} />
+      }
       contentContainerStyle={{ flexGrow: 1 }}
       nestedScrollEnabled={true}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={[styles.card, { backgroundColor: "#FFFEFA", flex: 1 }]}>
-        <Box mt={10} ph={ph}>
-          <Text style={[styles.title, { marginLeft: 5 }]}>
-            {taskData?.taskHeading}
-          </Text>
-          <Box mt={10}>
-            <Divider style={{ height: 1.2, color: "rgba(3, 1, 0, 0.08)" }} />
-          </Box>
-        </Box>
-
-        {/*//Priority Drop*/}
-        <Box mt={20} ph={0}>
-          <View
-            style={{
-              height: 40,
-              flexDirection: "row",
-              alignItems: "center",
-              paddingHorizontal: normalize(10),
-              padding: 2,
-            }}
-          >
-            {taskData?.priority && (
-              <Image
-                source={icons[taskData?.priority]}
-                resizeMode={"contain"}
-                style={{
-                  transform: [{ scale: 1.2 }],
-                  borderRadius: 10,
-                  height: 50,
-                  width: 50,
-                }}
-              />
-            )}
-            <View>
-              <Text style={styles.listLable}>Priority</Text>
-              <Text style={styles.subLable}>{taskData?.priority}</Text>
-            </View>
-          </View>
-          <Box mt={20}>
-            <Divider style={{ height: 1.2, color: "rgba(3, 1, 0, 0.08)" }} />
-          </Box>
-        </Box>
-
-        {/*//Descript */}
-        <Box mt={10} ph={ph}>
-          <View style={{ paddingHorizontal: normalize(5) }}>
-            <Text style={styles.descriptionLabel}>Description</Text>
-            <Text style={[styles.descriptionDetails, { marginTop: 7 }]}>
-              {taskData?.description}
+      showsVerticalScrollIndicator={false}>
+      {isLoading ? (
+        <ShimmerTaskDetails />
+      ) : (
+        <View style={[styles.card, { backgroundColor: "#FFFEFA", flex: 1 }]}>
+          <Box mt={10} ph={ph}>
+            <Text style={[styles.title, { marginLeft: 5 }]}>
+              {taskData?.taskHeading}
             </Text>
-          </View>
-          <Box mt={20}>
-            <Divider style={{ height: 1.2, color: "rgba(3, 1, 0, 0.08)" }} />
+            <Box mt={10}>
+              <Divider style={{ height: 1.2, color: "rgba(3, 1, 0, 0.08)" }} />
+            </Box>
           </Box>
-        </Box>
 
-        {/*//Location Drop*/}
-        <Box mt={10} ph={0}>
-          <View
-            style={{
-              height: 40,
-              flexDirection: "row",
-              alignItems: "center",
-              paddingHorizontal: normalize(10),
-              padding: 2,
-            }}
-          >
-            <Image
-              source={location}
-              resizeMode={"contain"}
-              style={{
-                transform: [{ scale: 1 }],
-                borderRadius: 10,
-                height: 45,
-                width: 45,
-              }}
-            />
-            <View>
-              <Text style={styles.listLable}>Location</Text>
-              <Text style={[styles.subLable]}>{taskData?.location}</Text>
-            </View>
-          </View>
-          <Box mt={20}>
-            <Divider style={{ height: 1.2, color: "rgba(3, 1, 0, 0.08)" }} />
-          </Box>
-        </Box>
-
-        {/*//Assigned to */}
-        <Box mt={10} ph={0}>
-          <View style={{ paddingHorizontal: normalize(5) }}>
-            <Text style={styles.listLable}>Assigned to</Text>
+          <Box mt={20} ph={0}>
             <View
               style={{
-                marginTop: 10,
-                flexWrap: "wrap",
+                height: 40,
                 flexDirection: "row",
-                justifyContent: "flex-start",
-              }}
-            >
-              {taskData?.assignTo?.map((item) => (
-                <AssignTo userId={item} />
-              ))}
+                alignItems: "center",
+                paddingHorizontal: normalize(10),
+                padding: 2,
+              }}>
+              {taskData?.priority && (
+                <Image
+                  source={icons[taskData?.priority]}
+                  resizeMode={"contain"}
+                  style={{
+                    transform: [{ scale: 1.2 }],
+                    borderRadius: 10,
+                    height: 50,
+                    width: 50,
+                  }}
+                />
+              )}
+              <View>
+                <Text style={styles.listLable}>Priority</Text>
+                <Text style={styles.subLable}>{taskData?.priority}</Text>
+              </View>
             </View>
-          </View>
-          <Box mt={20}>
-            <Divider style={{ height: 1.2, color: "rgba(3, 1, 0, 0.08)" }} />
+            <Box mt={20}>
+              <Divider style={{ height: 1.2, color: "rgba(3, 1, 0, 0.08)" }} />
+            </Box>
           </Box>
-        </Box>
 
-        {/*//Attachements to */}
-        <Box mt={10} ph={0}>
-          <View style={{ paddingHorizontal: normalize(5) }}>
-            <Text style={styles.listLable}>Attachment</Text>
-            <View style={[styles.attachmentContainer, { height: 130 }]}>
-              {taskData.attachments?.length > 0 ? (
+          <Box mt={10} ph={ph}>
+            <View style={{ paddingHorizontal: normalize(5) }}>
+              <Text style={styles.descriptionLabel}>Description</Text>
+              <Text style={[styles.descriptionDetails, { marginTop: 7 }]}>
+                {taskData?.description}
+              </Text>
+            </View>
+            <Box mt={20}>
+              <Divider style={{ height: 1.2, color: "rgba(3, 1, 0, 0.08)" }} />
+            </Box>
+          </Box>
+
+          <Box mt={10} ph={0}>
+            <View
+              style={{
+                height: 40,
+                flexDirection: "row",
+                alignItems: "center",
+                paddingHorizontal: normalize(10),
+                padding: 2,
+              }}>
+              <Image
+                source={location}
+                resizeMode={"contain"}
+                style={{
+                  transform: [{ scale: 1 }],
+                  borderRadius: 10,
+                  height: 45,
+                  width: 45,
+                }}
+              />
+              <View>
+                <Text style={styles.listLable}>Location</Text>
+                <Text style={[styles.subLable]}>{taskData?.location}</Text>
+              </View>
+            </View>
+            <Box mt={20}>
+              <Divider style={{ height: 1.2, color: "rgba(3, 1, 0, 0.08)" }} />
+            </Box>
+          </Box>
+
+          <Box mt={10} ph={0}>
+            <View style={{ paddingHorizontal: normalize(5) }}>
+              <Text style={styles.listLable}>Assigned to</Text>
+              <View
+                style={{
+                  marginTop: 10,
+                  flexWrap: "wrap",
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                }}>
+                {taskData?.assignTo?.map((item, index) => (
+                  <AssignTo key={index} user={item} />
+                ))}
+              </View>
+            </View>
+            <Box mt={20}>
+              <Divider style={{ height: 1.2, color: "rgba(3, 1, 0, 0.08)" }} />
+            </Box>
+          </Box>
+
+          <Box mt={10} ph={0}>
+            <View style={{ paddingHorizontal: normalize(5) }}>
+              <Text style={styles.listLable}>Attachment</Text>
+              <View style={[styles.attachmentContainer, { height: 130 }]}>
                 <FlashList
                   estimatedItemSize={100}
                   showsHorizontalScrollIndicator={false}
                   horizontal={true}
                   data={taskData?.attachments}
+                  ListEmptyComponent={() => <Text>No Attachement added</Text>}
                   renderItem={(item, index) => {
                     return (
                       <TouchableOpacity
@@ -196,8 +198,7 @@ const TaskDetailsPre = () => {
                         style={[
                           styles.pickerHolder,
                           { position: "relative", paddingVertical: 20 },
-                        ]}
-                      >
+                        ]}>
                         <Image
                           source={{
                             uri: item?.item,
@@ -209,245 +210,226 @@ const TaskDetailsPre = () => {
                     );
                   }}
                 />
+              </View>
+            </View>
+            <Box mt={20}>
+              <Divider style={{ height: 1.2, color: "rgba(3, 1, 0, 0.08)" }} />
+            </Box>
+          </Box>
+
+          {/* <Box mt={10} ph={ph}>
+            <View
+              style={{
+                paddingVertical: 10,
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}>
+              <Box
+                pv={6}
+                p={2}
+                style={{
+                  borderColor: "rgba(3, 1, 0, 0.08)",
+                  borderBottomWidth: 1,
+                }}>
+                <Text style={[styles.dateLabel]}>START DATE</Text>
+                <View style={{ flexDirection: "row", marginTop: 5 }}>
+                  <Text style={[styles.dateTime, { color: "red" }]}>
+                    {formatDate(taskData?.startDate)}
+                  </Text>
+
+                  <Text
+                    style={[styles.dateTime, { color: "red", marginLeft: 5 }]}>
+                    {formatTime(taskData?.startTime)}
+                  </Text>
+                </View>
+              </Box>
+              <View
+                mt={20}
+                style={{
+                  borderWidth: 0.9,
+                  borderColor: "rgba(3, 1, 0, 0.08)",
+                }}></View>
+              <Box
+                pv={6}
+                p={2}
+                style={{
+                  borderColor: "rgba(3, 1, 0, 0.08)",
+                  borderBottomWidth: 1,
+                }}>
+                <Text style={[styles.dateLabel]}>DUE DATE</Text>
+                <View style={{ flexDirection: "row", marginTop: 5 }}>
+                  <Text style={[styles.dateTime, { color: "#087B47" }]}>
+                    {formatDate(taskData?.endDate)}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.dateTime,
+                      { color: "#087B47", marginLeft: 5 },
+                    ]}>
+                    {formatTime(taskData?.endTime)}
+                  </Text>
+                </View>
+              </Box>
+            </View>
+          </Box> */}
+
+          <View
+            style={[
+              styles.card,
+              {
+                padding: 0,
+                margin: 2,
+                borderRadius: 8,
+                backgroundColor: "#F6F6F6",
+              },
+            ]}>
+            <Flex items={"center"} p={1} mt={5} mb={1}>
+              <Text
+                style={[
+                  styles.typo,
+                  { fontFamily: "Poppins-Medium", fontSize: normalize(11) },
+                ]}>
+                Today's working hours
+              </Text>
+            </Flex>
+            <View style={styles.durationContainer}>
+              <View style={styles.singleTime}>
+                <Image
+                  source={greenClock}
+                  resizeMode={"contain"}
+                  style={{ borderRadius: 10, height: 24, width: 24 }}
+                />
+
+                <Text
+                  style={[
+                    styles.type,
+                    { color: "#087B47", opacity: 0.5, marginLeft: 5 },
+                  ]}>
+                  08:00 PM
+                </Text>
+              </View>
+              <View style={{ alignSelf: "center" }}>
+                <Text
+                  style={[
+                    styles.type,
+                    {
+                      fontSize: normalize(12),
+                      marginTop: -3,
+                      color: "#40302A",
+                      opacity: 0.5,
+                      marginLeft: 5,
+                    },
+                  ]}>
+                  To
+                </Text>
+              </View>
+              <View style={styles.singleTime}>
+                <Image
+                  source={redClock}
+                  resizeMode={"contain"}
+                  style={{ borderRadius: 10, height: 24, width: 24 }}
+                />
+
+                <Text
+                  style={[
+                    styles.type,
+                    { color: "#CC3017", opacity: 0.5, marginLeft: 5 },
+                  ]}>
+                  08:00 PM
+                </Text>
+              </View>
+              <View style={styles.singleTime}>
+                <TouchableOpacity style={styles.add}>
+                  <Text
+                    style={[
+                      styles.typo,
+                      { color: "white", fontSize: normalize(10) },
+                    ]}>
+                    Add
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+
+          <View>
+            <View style={styles.header}>
+              <TouchableOpacity
+                onPress={() => setRoutes(1)}
+                style={[
+                  styles.tab,
+                  { backgroundColor: routes === 1 ? "#012547" : "#F4F4F4" },
+                ]}>
+                <Text
+                  style={[
+                    styles.tabTitle,
+                    {
+                      color: routes === 1 ? "#FFFEFA" : "#40302A",
+                      opacity: routes === 1 ? 1 : 0.5,
+                    },
+                  ]}>
+                  Chat
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setRoutes(2)}
+                style={[
+                  styles.tab,
+                  { backgroundColor: routes === 2 ? "#012547" : "#F4F4F4" },
+                ]}>
+                <Text
+                  style={[
+                    styles.tabTitle,
+                    {
+                      color: routes === 2 ? "#FFFEFA" : "#40302A",
+                      opacity: routes === 2 ? 1 : 0.5,
+                    },
+                  ]}>
+                  Attendence
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              {routes === 1 ? (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Chat" as never, {
+                      taskId: route?.params?.taskId,
+                    })
+                  }
+                  style={{
+                    padding: 10,
+                    paddingHorizontal: 20,
+                    paddingBottom: 20,
+                  }}>
+                  <Text
+                    style={[
+                      styles.typo,
+                      { color: "#005E98", fontSize: normalize(10) },
+                    ]}>
+                    Click here to load task chat
+                  </Text>
+                  <View
+                    style={{
+                      borderBottomWidth: 0.7,
+                      borderBottomColor: "#005E98",
+                      width: 150,
+                      mb: 0.2,
+                    }}></View>
+                  <View
+                    style={{
+                      borderBottomWidth: 0.7,
+                      borderBottomColor: "#005E98",
+                      width: 190,
+                    }}></View>
+                </TouchableOpacity>
               ) : (
-                <Text>No Attachement added</Text>
+                <Attendence />
               )}
             </View>
           </View>
-          <Box mt={20}>
-            <Divider style={{ height: 1.2, color: "rgba(3, 1, 0, 0.08)" }} />
-          </Box>
-        </Box>
-
-        {/*//Durations  */}
-        <Box mt={10} ph={ph}>
-          <View
-            style={{
-              paddingVertical: 10,
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <Box
-              pv={6}
-              p={2}
-              style={{
-                borderColor: "rgba(3, 1, 0, 0.08)",
-                borderBottomWidth: 1,
-              }}
-            >
-              <Text style={[styles.dateLabel]}>START DATE</Text>
-              <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text style={[styles.dateTime, { color: "red" }]}>
-                  {formatDate(taskData?.startDate)}
-                </Text>
-
-                <Text
-                  style={[styles.dateTime, { color: "red", marginLeft: 5 }]}
-                >
-                  {formatTime(taskData?.startTime)}
-                </Text>
-              </View>
-            </Box>
-            <View
-              mt={20}
-              style={{ borderWidth: 0.9, borderColor: "rgba(3, 1, 0, 0.08)" }}
-            ></View>
-            <Box
-              pv={6}
-              p={2}
-              style={{
-                borderColor: "rgba(3, 1, 0, 0.08)",
-                borderBottomWidth: 1,
-              }}
-            >
-              <Text style={[styles.dateLabel]}>DUE DATE</Text>
-              <View style={{ flexDirection: "row", marginTop: 5 }}>
-                <Text style={[styles.dateTime, { color: "#087B47" }]}>
-                  {formatDate(taskData?.endDate)}
-                </Text>
-                <Text
-                  style={[styles.dateTime, { color: "#087B47", marginLeft: 5 }]}
-                >
-                  {formatTime(taskData?.endTime)}
-                </Text>
-              </View>
-            </Box>
-          </View>
-        </Box>
-
-        {/*//working hours  */}
-        <View
-          style={[
-            styles.card,
-            {
-              padding: 0,
-              margin: 2,
-              borderRadius: 8,
-              backgroundColor: "#F6F6F6",
-            },
-          ]}
-        >
-          <Flex items={"center"} p={1} mt={5} mb={1}>
-            <Text
-              style={[
-                styles.typo,
-                { fontFamily: "Poppins-Medium", fontSize: normalize(11) },
-              ]}
-            >
-              Today's working hours
-            </Text>
-          </Flex>
-          <View style={styles.durationContainer}>
-            {/*//start time*/}
-            <View style={styles.singleTime}>
-              <Image
-                source={greenClock}
-                resizeMode={"contain"}
-                style={{ borderRadius: 10, height: 24, width: 24 }}
-              />
-
-              <Text
-                style={[
-                  styles.type,
-                  { color: "#087B47", opacity: 0.5, marginLeft: 5 },
-                ]}
-              >
-                08:00 PM
-              </Text>
-            </View>
-            <View style={{ alignSelf: "center" }}>
-              <Text
-                style={[
-                  styles.type,
-                  {
-                    fontSize: normalize(12),
-                    marginTop: -3,
-                    color: "#40302A",
-                    opacity: 0.5,
-                    marginLeft: 5,
-                  },
-                ]}
-              >
-                To
-              </Text>
-            </View>
-            {/*//end time*/}
-            <View style={styles.singleTime}>
-              <Image
-                source={redClock}
-                resizeMode={"contain"}
-                style={{ borderRadius: 10, height: 24, width: 24 }}
-              />
-
-              <Text
-                style={[
-                  styles.type,
-                  { color: "#CC3017", opacity: 0.5, marginLeft: 5 },
-                ]}
-              >
-                08:00 PM
-              </Text>
-            </View>
-            <View style={styles.singleTime}>
-              <TouchableOpacity style={styles.add}>
-                <Text
-                  style={[
-                    styles.typo,
-                    { color: "white", fontSize: normalize(10) },
-                  ]}
-                >
-                  Add
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
         </View>
-
-        {/*//chat attendenec  */}
-        <View>
-          <View style={styles.header}>
-            <TouchableOpacity
-              onPress={() => setRoutes(1)}
-              style={[
-                styles.tab,
-                { backgroundColor: routes === 1 ? "#012547" : "#F4F4F4" },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.tabTitle,
-                  {
-                    color: routes === 1 ? "#FFFEFA" : "#40302A",
-                    opacity: routes === 1 ? 1 : 0.5,
-                  },
-                ]}
-              >
-                Chat
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setRoutes(2)}
-              style={[
-                styles.tab,
-                { backgroundColor: routes === 2 ? "#012547" : "#F4F4F4" },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.tabTitle,
-                  {
-                    color: routes === 2 ? "#FFFEFA" : "#40302A",
-                    opacity: routes === 2 ? 1 : 0.5,
-                  },
-                ]}
-              >
-                Attendence
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View>
-            {routes === 1 ? (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("Chat" as never, { taskId: taskId })
-                }
-                style={{
-                  padding: 10,
-                  paddingHorizontal: 20,
-                  paddingBottom: 20,
-                }}
-              >
-                <Text
-                  style={[
-                    styles.typo,
-                    { color: "#005E98", fontSize: normalize(10) },
-                  ]}
-                >
-                  Click here to load task chat
-                </Text>
-                <View
-                  style={{
-                    borderBottomWidth: 0.7,
-                    borderBottomColor: "#005E98",
-                    width: 150,
-                    mb: 0.2,
-                  }}
-                ></View>
-                <View
-                  style={{
-                    borderBottomWidth: 0.7,
-                    borderBottomColor: "#005E98",
-                    width: 190,
-                  }}
-                ></View>
-              </TouchableOpacity>
-            ) : (
-              <Attendence />
-            )}
-          </View>
-        </View>
-      </View>
+      )}
     </ScrollView>
   );
 };
@@ -469,7 +451,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#40302A",
-    fontSize: normalize(14),
+    fontSize: normalize(16),
     fontWeight: "600",
     fontFamily: "Poppins-Regular",
     lineHeight: 24,
@@ -487,7 +469,7 @@ const styles = StyleSheet.create({
   listLable: {
     color: "#40302A",
     fontFamily: "Poppins-Regular",
-    fontSize: normalize(11),
+    fontSize: normalize(12),
     marginLeft: 10,
     fontWeight: "400",
     lineHeight: 16,
