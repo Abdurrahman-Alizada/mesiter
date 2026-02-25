@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import normalize from "../../utils/normalize";
 import { Formik } from "formik";
@@ -15,10 +15,11 @@ import RemainderDrop from "../../components/addTask/RemainderDrop";
 import CustomDatePicker from "../../components/addTask/CustomDatePicker";
 import UploadAttachments from "../../components/addTask/UploadAttachments";
 import { UIActivityIndicator } from "react-native-indicators";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import TrashIcon from "../../assets/icons/trash.png";
 import { showMessage } from "react-native-flash-message";
 import { useAddTaskMutation } from "../../redux/reducers/task/taskThunk";
+import { useGetAllUsersQuery } from "../../redux/reducers/user/userThunk";
 
 const initialValues = {
   taskHeading: "",
@@ -36,14 +37,22 @@ const initialValues = {
   endDate: new Date(),
   endTime: new Date(),
   attachments: [],
-  status: "inprogress",
+  status: "in-progress",
 };
 
 const AddTaskPre = () => {
+  const navigation = useNavigation();
   const [employes, setEmployes] = useState([]);
   const [uploadedPics, setUploadPics] = useState([]);
   const [items, setItems] = useState([]);
-  
+  const { data: usersData } = useGetAllUsersQuery();
+
+  useEffect(() => {
+    if (usersData?.users) {
+      setItems(usersData?.users);
+    }
+  }, [usersData]);
+
   const [addTask, { isLoading, isError, isSuccess, error }] =
     useAddTaskMutation();
 
@@ -65,8 +74,8 @@ const AddTaskPre = () => {
     try {
       const response = await addTask({
         ...values,
-        attachments: uploadedPics // Add attachments if any
-      })
+        attachments: uploadedPics, // Add attachments if any
+      });
 
       if (response) {
         showMessage({
@@ -79,6 +88,7 @@ const AddTaskPre = () => {
           duration: 6000,
         });
         actions.resetForm();
+        navigation.goBack()
       }
     } catch (error) {
       console.error("Error:", error.message);
@@ -192,14 +202,19 @@ const AddTaskPre = () => {
                   <EmployeDropDown
                     picker={formikprops.values["assignTo"]}
                     setPicker={newValue => {
-                      const assignToArray = formikprops.values["assignTo"];
-                      if (!assignToArray.includes(newValue)) {
-                        const updatedAssignTo = [...assignToArray, newValue];
+                      // Check if the newValue is already in the array
+                      if (!formikprops.values.assignTo.includes(newValue)) {
+                        // Add newValue to the array
+                        const updatedAssignTo = [
+                          ...formikprops.values.assignTo,
+                          newValue,
+                        ];
                         formikprops.setFieldValue("assignTo", updatedAssignTo);
                       }
                     }}
-                    items={items}
+                    items={items} // Pass mapped user items
                   />
+
                   {formikprops.touched["assignTo"] &&
                     formikprops.errors["assignTo"] && (
                       <Box ph={10} mt={2}>
@@ -215,20 +230,13 @@ const AddTaskPre = () => {
                       gap: 8,
                       flexWrap: "wrap",
                     }}>
-                    {formikprops.values["assignTo"]?.flatMap(val => {
-                      const filteredItems = items.filter(
-                        item => item.id === val,
-                      );
-                      const handleDelete = () => {
-                        const updatedAssignTo = formikprops.values[
-                          "assignTo"
-                        ].filter(item => item !== val);
-                        formikprops.setFieldValue("assignTo", updatedAssignTo);
-                      };
+                    {formikprops.values.assignTo.map((userId, index) => {
+                      const user = items.find(item => item._id === userId); // Find the selected user
+                      if (!user) return null; // Skip if user not found
 
-                      return filteredItems.map((filteredItem, index) => (
+                      return (
                         <View
-                          key={`${val}-${index}`}
+                          key={Math.random().toString(36).substr(2, 9)} // Ensure a unique key
                           style={{
                             backgroundColor: "#f6f6f6",
                             padding: 12,
@@ -238,45 +246,31 @@ const AddTaskPre = () => {
                             alignItems: "center",
                             gap: 10,
                           }}>
-                          <Image
-                            source={{ uri: filteredItem.employeImg }}
-                            style={{
-                              width: 20,
-                              height: 20,
-                              borderRadius: 25,
-                              marginRight: 12,
-                            }}
-                          />
                           <Text
                             style={{
                               color: "#012547",
                               fontSize: 14,
-                              textTransform: "capitalize",
                               fontWeight: "500",
                             }}>
-                            {filteredItem?.label}
+                            {user.fullName} {/* Display the full name */}
                           </Text>
-                          <TouchableOpacity onPress={handleDelete}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              // Remove user from assignTo array
+                              const updatedAssignTo =
+                                formikprops.values.assignTo.filter(
+                                  id => id !== userId,
+                                );
+                              formikprops.setFieldValue(
+                                "assignTo",
+                                updatedAssignTo,
+                              );
+                            }}>
                             <Image source={TrashIcon} />
                           </TouchableOpacity>
                         </View>
-                      ));
+                      );
                     })}
-                  </View>
-                  <View
-                    style={{
-                      marginTop: 10,
-                      flexWrap: "wrap",
-                      flexDirection: "row",
-                      justifyContent: "flex-start",
-                    }}>
-                    {employes.map((item, index) => (
-                      <SelectedChip
-                        key={index}
-                        employeData={item}
-                        removeHandler={removeEmploy}
-                      />
-                    ))}
                   </View>
                 </Box>
                 <Box mt={10} pv={10}>

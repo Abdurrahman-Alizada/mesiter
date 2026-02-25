@@ -1,25 +1,21 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import SelectedChip from "../../components/addTask/SelectedChip";
+import { useGetCurrentLoginUserQuery } from "../../redux/reducers/user/userThunk";
 
-const AssignTo = ({ userId }) => {
-  const [userData, setUserData] = useState();
+const AssignTo = ({ user }) => {
   const [userImage, setUserImage] = useState();
 
-  const fetchUserData = async () => {
-   
-  };
+  const { data, isLoading } = useGetCurrentLoginUserQuery();
+  console.log("data", data?.user);
 
-  useEffect(() => {
-    fetchUserData();
-  }, [userId]);
   return (
-    userData &&
-    userImage && (
+    data?.user &&
+    data?.user && (
       <SelectedChip
-        key={userId}
+        key={user?._id}
         showTrash={false}
-        employeData={{ employeImg: userImage, value: userData }}
+        employeData={user}
         removeHandler={() => {}}
       />
     )

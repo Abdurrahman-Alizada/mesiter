@@ -45,7 +45,7 @@ export default function TaskTabs({ tasks }) {
           onPress={() => setRoutes(2)}
           style={[styles.tab, { borderBottomWidth: routes === 2 ? 3 : 0 }]}>
           <Text style={[styles.tabTitle, { opacity: routes === 2 ? 1 : 0.5 }]}>
-            Inprogress
+            In-progress
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
